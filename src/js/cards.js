@@ -38,8 +38,8 @@ function setTransform(node, transformProp){
 
 function addTouch(touch) {
   lastTouches.push(touch);
-  if (lastTouches.length > 3) {
-    lastTouches.splice(0, lastTouches.length - 3);
+  if (lastTouches.length > 5) {
+    lastTouches.splice(0, lastTouches.length - 5);
   }
 }
 
@@ -141,32 +141,36 @@ function onTouch(touch, direction) {
 }
 
 function onRelease(start, end, touches) {
-  var average = touches.reduce(function (prev, next, index) {
-    return { y: (prev.y + next.y) / 2, stamp: next.stamp };
+  var moved = 0;
+  var velocity = 0;
+  var amplitude, start, target;
+  touches.reduce(function (prev, next) {
+    var elapsed = next.stamp - prev.stamp;
+    var delta = next.y - prev.y;
+    var v = 1000 * delta / (1 + elapsed);
+    velocity = 0.8 * v + 0.2 * velocity;
+    return next;
   })
-  var last;
-  var counter = touches.length - 1;
-  while (counter >= 0) {
-    last = touches[counter];
-    if (end.y !== last.y) {
-      break;
-    }
-    counter--;
-  }
-  if (Math.abs(end.y - average.y) > 5) {
-    var timeDiff = end.stamp - last.stamp;
-    var v = 1000 * (end.y - last.y) / (1 + timeDiff);
-    var distance = (end.y + v) * 0.80;
-    var target = 0;
+  if (velocity > 50 || velocity < -50) {
+    amplitude = 0.6 * velocity;
+    target = Math.round(amplitude);
+    start = Date.now();
     interruptAnimation = false;
     requestAnimationFrame(animateRelease);
   }
 
   function animateRelease() {
-    if (!interruptAnimation && (distance > 1 || distance < -1)) {
-      target = distance - (distance = distance * 0.90);
-      onMove(Math.floor(target), 'offset');
-      requestAnimationFrame(animateRelease);
+    if (!interruptAnimation) {
+      var elapsed = Date.now() - start;
+      var remainder = -amplitude * Math.exp(-elapsed / 325);
+      var toMove = target + remainder - moved;
+      if (remainder > 1 || remainder < -1) {
+        moved = target + remainder;
+        onMove(Math.round(toMove), 'offset');
+        requestAnimationFrame(animateRelease);
+      } else {
+        onMove(Math.round(remainder), 'offset');
+      }
     }
   }
 }
