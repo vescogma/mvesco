@@ -4,7 +4,7 @@ var lastTouches = []
 var interruptAnimation = false;
 var touchDown = {};
 var touchUp = {};
-
+var colours = ['#ff4136', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
 window.onload = initialize;
 
 function getCards() {
@@ -73,14 +73,18 @@ function onMove(event, type) {
 
 function checkCurrentCard(card, delta, cardIndex, prev) {
   if (cardIndex === tracker + 1) {
-    var result;
+    var result, header;
     if (card.offset + delta >= prev.height + prev.stackedOffset) {
       if (delta > 0 || delta < 0) {
         tracker = tracker < 0 ? -1 : tracker - 1;
+        header = document.getElementById('header');
+        header.style.backgroundColor = colours[tracker];
       }
       result = prev.height + prev.stackedOffset;
     } else if (card.offset + delta <= card.stackedOffset) {
       tracker = (cardIndex === cards.length - 1) ? cardIndex - 1 : cardIndex;
+      header = document.getElementById('header');
+      header.style.backgroundColor = colours[tracker];
       result = card.stackedOffset;
     } else {
       result = card.offset + delta;
