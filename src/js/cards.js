@@ -2,7 +2,7 @@ var cards = [];
 var tracker = -1;
 var lastTouches = []
 var interruptAnimation = false;
-var colours = ['#ff4136', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
+var colours = ['#ff4136', '#39cccc', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
 var windowSize = window.innerHeight;
 var cardZero = {
   height: 0,
@@ -115,6 +115,10 @@ function onMove(event, type) {
       if (card.offset - delta < card.stackedOffset) {
         result = card.stackedOffset;
         card.top = true;
+        var header = document.getElementById('header');
+        header.style.backgroundColor = colours[index];
+      } else if (!prev.top && card.offset - delta < prev.height + prev.offset) {
+        result = prev.height + prev.offset;
       } else {
         result = card.offset - delta;
       }
@@ -122,6 +126,8 @@ function onMove(event, type) {
       if (card.offset - delta >= prev.height + prev.offset) {
         result = prev.height + prev.offset;
         prev.top = false;
+        var header = document.getElementById('header');
+        header.style.backgroundColor = colours[index - 2];
       } else {
         result = card.offset - delta;
       }
