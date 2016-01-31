@@ -2,18 +2,35 @@ var cards = [];
 var tracker = -1;
 var lastTouches = []
 var interruptAnimation = false;
-var touchDown = {};
-var touchUp = {};
-var colours = ['#ff4136', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
+var colours = ['#ff4136', '#39cccc', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
+var windowSize = window.innerHeight;
+var cardZero = {
+  height: 0,
+  offset: 0,
+  show: true,
+  top: true,
+  stackedOffset: 0,
+}
+var cardLast = {
+  height: 0,
+  offset: 0,
+  show: false,
+  top: false,
+  stackedOffset: 0,
+}
+
 window.onload = initialize;
 
 function getCards() {
-  return Array.from(document.getElementsByName('c-card')).map(function (card) {
+  var cards = Array.from(document.getElementsByName('c-card'));
+  return cards.map(function (card, index) {
+    var height = card.offsetHeight;
     return {
       node: card,
-      height: card.offsetHeight,
-      stackedOffset: card.offsetHeight > window.innerHeight ?
-        window.innerHeight - card.offsetHeight : 0
+      height: height,
+      show: false,
+      top: false,
+      stackedOffset: height > windowSize ? windowSize - height : 0,
     }
   });
 }
@@ -21,14 +38,19 @@ function getCards() {
 function initialize() {
   cards = getCards();
   cards.reduce(function (prev, next) {
-    next.offset = prev;
-    setTransform(next.node, 'translate3d(0px, ' + prev + 'px, 0px)');
-    return prev + next.height;
+    var target = windowSize;
+    if (prev < windowSize) {
+      target = prev;
+      next.show = true;
+    }
+    next.offset = target;
+    transform(next.node, 'translate3d(0px, ' + target + 'px, 0px)');
+    return target + next.height;
   }, 0);
   document.getElementById('c-wrap').style.visibility = 'visible';
 }
 
-function setTransform(node, transformProp){
+function transform(node, transformProp){
   node.style.WebkitTransform = transformProp;
   node.style.MozTransform = transformProp;
   node.style.msTransform = transformProp;
@@ -48,7 +70,7 @@ function getDelta(event, type) {
     case 'touch':
       var last = lastTouches[lastTouches.length - 1].y;
       addTouch({ y: event.clientY, stamp: Date.now() });
-      return event.clientY - (last || event.clientY );
+      return (last || event.clientY ) - event.clientY;
     case 'wheel':
       return event.deltaY;
     case 'offset':
@@ -58,85 +80,91 @@ function getDelta(event, type) {
 }
 
 function onMove(event, type) {
+  var past = 0;
+  var offset = 0;
   var delta = getDelta(event, type);
-  cards.reduce(function (prev, next, index) {
-    if (index > tracker) {
-      next.past = next.offset;
-      next.offset = checkCurrentCard(next, delta, index, prev);
-      if (next.past !== next.offset) {
-        setTransform(next.node, 'translate3d(0px, ' + next.offset + 'px, 0px)');
+  if (delta > 0 || delta < 0) {
+    cards.map(function (card, index) {
+      var prev = cards[index - 1] || cardZero;
+      var next = cards[index + 1] || cardLast;
+      if (!card.top && card.show) {
+        moveCard(card, delta, prev, next, index);
       }
-    }
-    return next;
-  }, {height: 0, offset: 0, stackedOffset: 0})
-}
+      return card;
+    });
+  }
 
-function checkCurrentCard(card, delta, cardIndex, prev) {
-  if (cardIndex === tracker + 1) {
-    var result, header;
-    if (card.offset + delta >= prev.height + prev.stackedOffset) {
-      if (delta > 0 || delta < 0) {
-        tracker = tracker < 0 ? -1 : tracker - 1;
-        header = document.getElementById('header');
-        header.style.backgroundColor = colours[tracker];
+  function moveCard(card, delta, prev, next, index) {
+    past = card.offset;
+    offset = checkOffset(card, delta, prev, next, index);
+    if (delta > 0) {
+      offset = checkMaximum(index, offset);
+    }
+    if (past !== offset) {
+      card.offset = offset;
+      transform(card.node, 'translate3d(0px, ' + offset + 'px, 0px)');
+    }
+  }
+
+  function checkOffset(card, delta, prev, next, index) {
+    var result;
+    if (card.offset - delta + card.height <= windowSize) {
+      next.show = true;
+    }
+    if (delta > 0) {
+      if (card.offset - delta < card.stackedOffset) {
+        result = card.stackedOffset;
+        card.top = true;
+        var header = document.getElementById('header');
+        header.style.backgroundColor = colours[index];
+      } else if (!prev.top && card.offset - delta < prev.height + prev.offset) {
+        result = prev.height + prev.offset;
+      } else {
+        result = card.offset - delta;
       }
-      result = prev.height + prev.stackedOffset;
-    } else if (card.offset + delta <= card.stackedOffset) {
-      tracker = (cardIndex === cards.length - 1) ? cardIndex - 1 : cardIndex;
-      header = document.getElementById('header');
-      header.style.backgroundColor = colours[tracker];
-      result = card.stackedOffset;
     } else {
-      result = card.offset + delta;
+      if (card.offset - delta >= prev.height + prev.offset) {
+        result = prev.height + prev.offset;
+        prev.top = false;
+        var header = document.getElementById('header');
+        header.style.backgroundColor = colours[index - 2];
+      } else {
+        result = card.offset - delta;
+      }
     }
-    return checkMaximum(result, cardIndex);
-  } else {
-    return prev.offset + prev.height;
-  }
-}
+    if (result >= windowSize) {
+      result = windowSize;
+      card.show = false;
+    }
+    return result;
+  };
 
-function checkMaximum(offset, cardIndex) {
-  var heightLeft = cards.reduce(function (prev, card, index) {
-    if (index > cardIndex - 1) {
-      return card.height + prev;
+  function checkMaximum(cardIndex, offset) {
+    var heightLeft = cards.reduce(function (prev, next, index) {
+      if (index > cardIndex - 1) {
+        return next.height + prev;
+      }
+      return prev;
+    }, 0);
+    if (heightLeft + offset < windowSize) {
+      return windowSize - heightLeft;
     }
-    return prev;
-  }, 0);
-  if (heightLeft + offset < window.innerHeight) {
-    return window.innerHeight - heightLeft;
+    return offset;
   }
-  return offset;
 }
 
 function onResize() {
-  cards = getCards();
-  cards.reduce(function (prev, next, index) {
-    next.offset = prev.offset + prev.height;
-    if (checkMaximum(next.offset, index) !== next.offset) {
-      tracker = tracker < 0 ? -1 : tracker - 1;
-    }
-    if (index <= tracker) {
-      next.offset = next.stackedOffset;
-      setTransform(next.node,
-        'translate3d(0px, ' + next.stackedOffset + 'px, 0px)');
-    }
-    if (index > tracker) {
-      next.offset = checkCurrentCard(next, 0, index, prev);
-      setTransform(next.node, 'translate3d(0px, ' + next.offset + 'px, 0px)');
-    }
-    return next;
-  }, {height: 0, offset: 0, stackedOffset: 0})
+  windowSize = window.innerHeight;
+  initialize();
 }
 
 function onTouch(touch, direction) {
   switch (direction) {
     case 'start':
       addTouch({ y: touch.clientY, stamp: Date.now() });
-      touchDown = { y: touch.clientY, stamp: Date.now() };
       break;
     case 'end':
-      touchUp = { y: touch.clientY, stamp: Date.now() };
-      onRelease(touchDown, touchUp, lastTouches);
+      onRelease(lastTouches);
       lastTouches = [];
       break;
     default:
@@ -144,10 +172,8 @@ function onTouch(touch, direction) {
   }
 }
 
-function onRelease(start, end, touches) {
-  var moved = 0;
+function onRelease(touches) {
   var velocity = 0;
-  var amplitude, start, target;
   touches.reduce(function (prev, next) {
     var elapsed = next.stamp - prev.stamp;
     var delta = next.y - prev.y;
@@ -156,12 +182,22 @@ function onRelease(start, end, touches) {
     return next;
   })
   if (velocity > 50 || velocity < -50) {
+    scrollTo(-velocity);
+  }
+}
+
+function scrollTo(velocity, target) {
+  var amplitude, start, target;
+  var moved = 0;
+  if (!target) {
     amplitude = 0.6 * velocity;
     target = Math.round(amplitude);
-    start = Date.now();
-    interruptAnimation = false;
-    requestAnimationFrame(animateRelease);
+  } else {
+    amplitude = 1000;
   }
+  start = Date.now();
+  interruptAnimation = false;
+  requestAnimationFrame(animateRelease);
 
   function animateRelease() {
     if (!interruptAnimation) {
