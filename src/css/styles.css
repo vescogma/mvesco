@@ -1,4 +1,7 @@
+@import 'basscss';
+
 /* main */
+
 @font-face {
   font-family: 'Ubuntu';
   src: url('../fonts/Ubuntu-L.ttf')  format('truetype');
