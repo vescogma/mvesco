@@ -3,145 +3,165 @@ import Header from './Header';
 import About from './About';
 import Skills from './Skills';
 import Contact from './Contact';
-import { initializeCards } from '../utils/cardUtils';
+import {
+  initializeCards,
+  calculateNextCards,
+  getDelta,
+} from '../utils/cardUtils';
 
 class App extends Component {
+  interruptAnimation = false;
+  touches = [];
+  cards = [];
+  size = 0;
+
   componentWillMount() {
     window.addEventListener('resize', this.handleResize);
     window.addEventListener('wheel', this.handleScroll);
-    window.addEventListener('touchstart', this.handleTouch);
-    window.addEventListener('touchend', this.handleTouch);
+    window.addEventListener('touchstart', this.handleTouchStart);
+    window.addEventListener('touchend', this.handleTouchEnd);
     window.addEventListener('touchmove', this.handleTouch);
   }
 
   componentDidMount() {
     this.refs.wrap.style.visibility = 'visible';
-    const cards = this.refs.wrap.children;
-    console.log('setting state');
-    this.setState((state, props) => {
-      return {
-        cards: initializeCards(window.innerHeight, cards),
-        size: window.innerHeight,
-      };
-    });
+    this.size = window.innerHeight;
+    this.cards = initializeCards(window.innerHeight, this.refs.wrap.children);
+    this.handleInit();
   }
 
-  componentWillUpdate = (props, state) => {
-    console.log('will update');
-  };
+  componentWillUpdate = (props, state) => {};
 
-  componentDidUpdate = (props, state) => {
-    console.log('did update');
-  };
+  componentDidUpdate = (props, state) => {};
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
     window.removeEventListener('wheel', this.handleScroll);
-    window.removeEventListener('touchstart', this.handleTouch);
-    window.removeEventListener('touchend', this.handleTouch);
+    window.removeEventListener('touchstart', this.handleTouchStart);
+    window.removeEventListener('touchend', this.handleTouchEnd);
     window.removeEventListener('touchmove', this.handleTouch);
   }
 
   render() {
     return (
       <div ref="wrap" className="card-holder">
-        <Header offset={ this.getCardOffset(0) } />
-        <About offset={ this.getCardOffset(1) } />
-        <Skills offset={ this.getCardOffset(2) } />
-        <Contact offset={ this.getCardOffset(3) } />
+        <Header />
+        <About />
+        <Skills />
+        <Contact />
       </div>
     );
   }
 
-  getCardOffset(index) {
-    if (this.state === null ) {
-      return 0;
-    }
-    return this.state.cards[index].offset;
-  }
-
   handleResize = (event) => {
-    this.setState({ size: window.innerWidth });
+    this.interruptAnimation = true;
+    this.size = window.innerHeight;
+    this.cards = initializeCards(window.innerHeight, this.refs.wrap.children);
+    this.handleInit();
   };
 
   handleScroll = (event) => {
-    this.moveCards(event, 'wheel');
+    this.interruptAnimation = true;
+    this.handleMove(event, 'wheel');
   };
 
-  moveCards(event, type) {
-    console.log(event);
-  //   var past = 0;
-  //   var offset = 0;
-  //   var delta = getDelta(event, type);
-  //   if (delta > 0 || delta < 0) {
-  //     cards.map(function (card, index) {
-  //       var prev = cards[index - 1] || cardZero;
-  //       var next = cards[index + 1] || cardLast;
-  //       if (!card.top && card.show) {
-  //         moveCard(card, delta, prev, next, index);
-  //       }
-  //       return card;
-  //     });
-  //   }
+  handleTouchStart = (event) => {
+    this.interruptAnimation = true;
+    const touch = event.touches[0];
+    this.addTouch({ y: touch.clientY, stamp: Date.now() });
+  };
 
-  //   function moveCard(card, delta, prev, next, index) {
-  //     past = card.offset;
-  //     offset = checkOffset(card, delta, prev, next, index);
-  //     if (delta > 0) {
-  //       offset = checkMaximum(index, offset);
-  //     }
-  //     if (past !== offset) {
-  //       card.offset = offset;
-  //       transform(card.node, 'translate3d(0px, ' + offset + 'px, 0px)');
-  //     }
-  //   }
+  handleTouch = (event) => {
+    this.handleMove(event.touches[0], 'touch');
+  };
 
-  //   function checkOffset(card, delta, prev, next, index) {
-  //     var result;
-  //     if (card.offset - delta + card.height <= windowSize) {
-  //       next.show = true;
-  //     }
-  //     if (delta > 0) {
-  //       if (card.offset - delta < card.stackedOffset) {
-  //         result = card.stackedOffset;
-  //         card.top = true;
-  //         var header = document.getElementById('header');
-  //         header.style.backgroundColor = colours[index];
-  //       } else if (!prev.top && card.offset - delta < prev.height + prev.offset) {
-  //         result = prev.height + prev.offset;
-  //       } else {
-  //         result = card.offset - delta;
-  //       }
-  //     } else {
-  //       if (card.offset - delta >= prev.height + prev.offset) {
-  //         result = prev.height + prev.offset;
-  //         prev.top = false;
-  //         var header = document.getElementById('header');
-  //         header.style.backgroundColor = colours[index - 2];
-  //       } else {
-  //         result = card.offset - delta;
-  //       }
-  //     }
-  //     if (result >= windowSize) {
-  //       result = windowSize;
-  //       card.show = false;
-  //     }
-  //     return result;
-  //   };
+  handleTouchEnd = (event) => {
+    this.handleRelease(this.touches);
+    this.touches = [];
+  };
 
-  //   function checkMaximum(cardIndex, offset) {
-  //     var heightLeft = cards.reduce(function (prev, next, index) {
-  //       if (index > cardIndex - 1) {
-  //         return next.height + prev;
-  //       }
-  //       return prev;
-  //     }, 0);
-  //     if (heightLeft + offset < windowSize) {
-  //       return windowSize - heightLeft;
-  //     }
-  //     return offset;
-  //   }
-  }
+  handleInit = () => {
+    let prop = '';
+    Array.from(this.refs.wrap.children).map((card, index) => {
+      prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
+      this.transform(card, prop);
+    })
+    this.refs.wrap.style.visibility = 'visible';
+  };
+
+  handleMove = (event, type) => {
+    const delta = getDelta(event, type, this.touches, this.addTouch);
+    if (delta > 0 || delta < 0) {
+      const cards = this.cards;
+      const windowSize = this.size;
+      const next = calculateNextCards(cards, delta, windowSize);
+      let transformProp = '';
+      Array.from(this.refs.wrap.children).map((card, index) => {
+        transformProp = 'translate3d(0px, ' + next[index].offset + 'px, 0px)';
+        this.transform(card, transformProp);
+      });
+    }
+  };
+
+  handleRelease = (touches) => {
+    let velocity = 0;
+    touches.reduce(function (prev, next) {
+      const elapsed = next.stamp - prev.stamp;
+      const delta = next.y - prev.y;
+      const v = 1000 * delta / (1 + elapsed);
+      velocity = 0.8 * v + 0.2 * velocity;
+      return next;
+    })
+    if (velocity > 50 || velocity < -50) {
+      this.scrollTo(-velocity);
+    }
+  };
+
+  scrollTo = (velocity, specific) => {
+    let amplitude = 0;
+    let target = specific;
+    const move = this.handleMove;
+    let moved = 0;
+    if (!target) {
+      amplitude = 0.6 * velocity;
+      target = Math.round(amplitude);
+    } else {
+      amplitude = 1000;
+    }
+    const start = Date.now();
+    this.interruptAnimation = false;
+    requestAnimationFrame(animateRelease.bind(this));
+
+    function animateRelease() {
+      if (!this.interruptAnimation) {
+        const elapsed = Date.now() - start;
+        const remainder = -amplitude * Math.exp(-elapsed / 325);
+        const toMove = target + remainder - moved;
+        if (remainder > 1 || remainder < -1) {
+          moved = target + remainder;
+          move(Math.round(toMove), 'offset');
+          requestAnimationFrame(animateRelease.bind(this));
+        } else {
+          move(Math.round(remainder), 'offset');
+        }
+      }
+    }
+  };
+
+  addTouch = (touch) => {
+    this.touches.push(touch);
+    if (this.touches.length > 5) {
+      this.touches.splice(0, this.touches.length - 5);
+    }
+  };
+
+  transform = (node, transformProp) => {
+    node.style.WebkitTransform = transformProp;
+    node.style.MozTransform = transformProp;
+    node.style.msTransform = transformProp;
+    node.style.OTransform = transformProp;
+    node.style.transform = transformProp;
+  };
 };
 
 export default App;

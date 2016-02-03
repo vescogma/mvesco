@@ -1,12 +1,11 @@
 import React from 'react';
 import Card from './Card';
 
-const About = ({ offset }) => {
+const About = () => {
   return (
     <Card
       title="About"
-      colorClass="bg-blue"
-      offset={ offset }>
+      colorClass="bg-teal">
       <p>
         I am a Developer, Musician, and a Mechatronics Engineering graduate.
       </p><p>

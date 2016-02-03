@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
 
-const Card = ({ children, title, colorClass, offset }) => {
-  const styles = {
-    WebkitTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    MozTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    msTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    OTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    transform: 'translate3d(0px, ' + offset + 'px, 0px)',
-  }
+const Card = ({ children, title, colorClass }) => {
   return (
-    <div className="card" style={ { ...styles } }>
+    <div className="card">
       <div className="container content-wrap bg-silver">
         <div className="bg-white">
           <div className={ `card-title ${ colorClass }` }>{ title }</div>

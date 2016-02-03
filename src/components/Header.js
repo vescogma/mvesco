@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
 
-const Header = ({ offset }) => {
-  const styles = {
-    WebkitTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    MozTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    msTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    OTransform: 'translate3d(0px, ' + offset + 'px, 0px)',
-    transform: 'translate3d(0px, ' + offset + 'px, 0px)',
-  }
+const Header = () => {
   return (
-    <div className="card" style={ { ...styles } }>
+    <div className="card">
       <div id="header" className="header bg-red">
         <div className="inner container bg-white">
           <div className="bold h3 black center pt4">

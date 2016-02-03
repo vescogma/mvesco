@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import Card from './Card';
 
-const Skills = ({ offset }) => {
+const Skills = () => {
   return (
     <Card
       title="Skills"
-      colorClass="bg-blue"
-      offset={ offset }>
+      colorClass="bg-blue">
       <div className="flex-grow">
         <div className="h3 p2 bg-darken-1 blue">Web</div>
         <div className="p2">

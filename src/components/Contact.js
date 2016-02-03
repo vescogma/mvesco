@@ -1,12 +1,11 @@
 import React from 'react';
 import Card from './Card';
 
-const Contact = ({ offset }) => {
+const Contact = () => {
   return (
     <Card
       title="Contact"
-      colorClass="bg-green"
-      offset={ offset }>
+      colorClass="bg-green">
       <div className="flex-auto green">Email</div>
       <div className="flex-auto green">LinkedIn</div>
       <div className="flex-auto green">GitHub</div>
