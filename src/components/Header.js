@@ -15,7 +15,7 @@ const Header = () => {
           <div className="fit shadow pb3">
             <div className="header-card col-12 sm-col-8">
               <div className="p2 image-wrap mx-auto">
-                <img className="circle image-max" src="img/me.jpg" />
+                <img className="circle image-max" src="assets/me-small.jpg" />
               </div>
             </div>
           </div>
