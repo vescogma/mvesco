@@ -5,7 +5,7 @@ export function initializeCards(windowHeight, cards) {
       height: cardHeight,
       show: false,
       top: false,
-      stackedOffset: cardHeight > windowHeight ? windowHeight - cardHeight : 0,
+      min: cardHeight > windowHeight ? windowHeight - cardHeight : 0,
     };
   });
   cardState.reduce(function (prev, next) {
@@ -35,50 +35,40 @@ export function getDelta(event, type, touches, addTouch) {
 }
 
 export function calculateNextCards(cards, delta, windowSize) {
-  const cardZero = {
-    height: 0,
-    offset: 0,
-    show: true,
-    top: true,
-    stackedOffset: 0,
-  }
-  const cardLast = {
-    height: 0,
-    offset: 0,
-    show: false,
-    top: false,
-    stackedOffset: 0,
-  }
+  const cardZero = { height: 0, offset: 0, show: true, top: true, min: 0 };
+  const cardLast = { height: 0, offset: 0, show: false, top: false, min: 0 };
   return cards.map(function (card, index) {
     let newCard = card;
-    if (!card.top && card.show) {
-      const prev = cards[index - 1];
-      const next = cards[index + 1];
+    if (card.show && !card.top) {
+      const prev = cards[index - 1] || cardZero;
+      const next = cards[index + 1] || cardLast;
       newCard = moveCard(card, delta, prev, next, index);
     }
     return newCard;
   });
 
   function moveCard(card, delta, prev, next, index) {
-    const newCard = checkOffset(card, delta, prev, next);
+    const newCard = checkOffset(card, delta, prev, next, index);
     if (delta > 0) {
       newCard.offset = checkMaximum(index, card.offset);
     }
     return newCard;
   };
 
-  function checkOffset(card, delta, prev, next) {
+  function checkOffset(card, delta, prev, next, index) {
     const newCard = card;
-    if (!!next && card.offset - delta + card.height <= windowSize) {
+    if (card.offset - delta + card.height <= windowSize) {
       next.show = true;
     }
     if (delta > 0) {
       // SCROLL DOWN
-      const abovePrevCardBottom = !!prev && !prev.top
+      const abovePrevCardBottom = !prev.top
         && card.offset - delta < prev.height + prev.offset;
-      if (card.offset - delta < card.stackedOffset) {
-        newCard.offset = card.stackedOffset;
-        newCard.top = true;
+      if (card.offset - delta < card.min) {
+        newCard.offset = card.min;
+        if (index < cards.length - 1) {
+          newCard.top = true;
+        }
       } else if (abovePrevCardBottom) {
         newCard.offset = prev.height + prev.offset;
       } else {
@@ -86,12 +76,9 @@ export function calculateNextCards(cards, delta, windowSize) {
       }
     } else {
       // SCROLL UP
-      if (!!prev && card.offset - delta >= prev.height + prev.offset) {
+      if (card.offset - delta >= prev.height + prev.offset) {
         newCard.offset = prev.height + prev.offset;
         prev.top = false;
-      } else if (!prev && card.offset - delta > 0) {
-        newCard.offset = 0;
-        newCard.top = true;
       } else {
         newCard.offset = card.offset - delta;
       }

@@ -76,6 +76,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* header */
+
 .header-card {
   position: relative;
   bottom: 1rem;
@@ -99,6 +100,14 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   top: 8rem;
 }
+.image-wrap {
+  height: 15rem;
+  width: 15rem;
+}
+.image-max {
+  height: 100%;
+  width: 100%;
+}
 
 /* projects */
 
@@ -109,8 +118,9 @@ h1, h2, h3, h4, h5, h6 {
   height: 8rem;
   min-width: 12rem;
   position: relative;
+  margin: 0.5rem;
 }
-.project .image {
+.project-image {
   position: absolute;
   top: 0;
   background-position: center;
@@ -119,7 +129,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 8rem;
   width: 100%;
 }
-.project .title {
+.project-title {
   position: absolute;
   top: 0;
   background-color: rgba(228,228,228,1);
@@ -127,25 +137,62 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1rem;
   height: 8rem;
   width: 100%;
-  padding-top: 3rem;
-  opacity: 1;
-  -webkit-transition: opacity 0.5s ease;
-  -moz-transition: opacity 0.5s ease;
-  -ms-transition: opacity 0.5s ease;
-  transition: opacity 0.5s ease;
+  padding-top: 2rem;
+  -webkit-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  -moz-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  -ms-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+.project-title:hover{
+  background-color: rgba(228,228,228,0);
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+}
+.project-icon {
+  background-image: url('../assets/default.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  min-width: 2rem;
+  min-height: 2rem;
+  margin-bottom: 0.5rem;
 }
 
-.project .title:hover{
-  background-color: rgba(228,228,228,0.25);
-}
+/* contact */
 
-/* header */
-
-.image-wrap {
-  height: 15rem;
-  width: 15rem;
+.contacts {
+  min-width: 10rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  margin: 0.5rem;
+  background-color: rgba(228,228,228,1);
+  cursor: pointer;
+  -webkit-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  -moz-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  -ms-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
-.image-max {
-  height: 100%;
-  width: 100%;
+.contacts:hover {
+  background-color: rgba(228,228,228,0);
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+}
+.contact-icon {
+  display: inline-block;
+  vertical-align: top;
+  background-image: url('../assets/default.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  min-width: 2rem;
+  min-height: 2rem;
+}
+.contact-label {
+  display: inline-block;
+  vertical-align: top;
+  min-height: 2rem;
+  padding-left: 1rem;
+  line-height: 2rem;
 }

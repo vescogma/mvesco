@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from './Header';
 import About from './About';
 import Skills from './Skills';
+import Projects from './Projects';
 import Contact from './Contact';
 import {
   initializeCards,
@@ -14,6 +15,7 @@ class App extends Component {
   touches = [];
   cards = [];
   size = 0;
+  colors = ['#ff4136', '#39cccc', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
 
   componentWillMount() {
     window.addEventListener('resize', this.handleResize);
@@ -48,6 +50,7 @@ class App extends Component {
         <Header />
         <About />
         <Skills />
+        <Projects />
         <Contact />
       </div>
     );
@@ -81,25 +84,16 @@ class App extends Component {
   };
 
   handleInit = () => {
-    let prop = '';
-    Array.from(this.refs.wrap.children).map((card, index) => {
-      prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
-      this.transform(card, prop);
-    })
+    this.setTransform();
     this.refs.wrap.style.visibility = 'visible';
   };
 
   handleMove = (event, type) => {
     const delta = getDelta(event, type, this.touches, this.addTouch);
     if (delta > 0 || delta < 0) {
-      const cards = this.cards;
       const windowSize = this.size;
-      const next = calculateNextCards(cards, delta, windowSize);
-      let transformProp = '';
-      Array.from(this.refs.wrap.children).map((card, index) => {
-        transformProp = 'translate3d(0px, ' + next[index].offset + 'px, 0px)';
-        this.transform(card, transformProp);
-      });
+      this.cards = calculateNextCards(this.cards, delta, windowSize);
+      this.setTransform();
     }
   };
 
@@ -148,19 +142,40 @@ class App extends Component {
     }
   };
 
+  setBannerColor = () => {
+    const colorIndex = this.cards.reduce((prev, next, index) => {
+      if (next.top === true) {
+        return index;
+      }
+      return prev;
+    }, 0)
+    const header = document.getElementById('header');
+    header.style.backgroundColor = this.colors[colorIndex];
+  };
+
+  setTransform = () => {
+    let prop = '';
+    Array.from(this.refs.wrap.children).map((card, index) => {
+      prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
+      transform(card, prop);
+      return card;
+    });
+    this.setBannerColor();
+
+    function transform(node, transformProp) {
+      node.style.WebkitTransform = transformProp;
+      node.style.MozTransform = transformProp;
+      node.style.msTransform = transformProp;
+      node.style.OTransform = transformProp;
+      node.style.transform = transformProp;
+    };
+  };
+
   addTouch = (touch) => {
     this.touches.push(touch);
     if (this.touches.length > 5) {
       this.touches.splice(0, this.touches.length - 5);
     }
-  };
-
-  transform = (node, transformProp) => {
-    node.style.WebkitTransform = transformProp;
-    node.style.MozTransform = transformProp;
-    node.style.msTransform = transformProp;
-    node.style.OTransform = transformProp;
-    node.style.transform = transformProp;
   };
 };
 
