@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 const Card = ({ children, title, colorClass }) => {
   return (
     <div className="card">
-      <div className="container content-wrap bg-silver">
+      <div className="container pb2 bg-silver">
         <div className="bg-white">
           <div className={ `card-title ${ colorClass }` }>{ title }</div>
           <div className="fit shadow pb3">

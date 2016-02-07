@@ -1,13 +1,13 @@
 import React from 'react';
-import Card from './Card';
+import Card from '../ui/Card';
 
-const Projects = () => {
+const Projects = ({ toggleProject }) => {
   return (
     <Card
       title="Projects"
       colorClass="bg-purple">
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(1) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -16,7 +16,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(2) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -25,7 +25,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(3) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -34,7 +34,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(4) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -43,7 +43,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(5) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -52,7 +52,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(6) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -61,7 +61,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(7) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>
@@ -70,7 +70,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="flex-auto purple">
-        <div className="project">
+        <div className="project" onClick={ () => toggleProject(8) }>
           <div className="project-image"></div>
           <div className="project-title">
             <div className="project-icon"></div>

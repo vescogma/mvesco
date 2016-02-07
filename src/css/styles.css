@@ -18,6 +18,8 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: Ubuntu, Helvetica, sans-serif;
 }
+.pb2 { padding-bottom: 1rem; }
+.pt2 { padding-top: 1rem; }
 .pb3 { padding-bottom: 2rem; }
 .pt3 { padding-top: 2rem; }
 .pb4 { padding-bottom: 4rem; }
@@ -39,9 +41,6 @@ h1, h2, h3, h4, h5, h6 {
 .card {
   position: absolute;
   width: 100%;
-}
-.content-wrap {
-  padding-bottom: 1rem;
 }
 .content-card {
   color: #111;
@@ -119,6 +118,7 @@ h1, h2, h3, h4, h5, h6 {
   min-width: 12rem;
   position: relative;
   margin: 0.5rem;
+  cursor: pointer;
 }
 .project-image {
   position: absolute;
@@ -195,4 +195,49 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 2rem;
   padding-left: 1rem;
   line-height: 2rem;
+}
+
+/* modal */
+.modal {
+  visibility: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+}
+.modal.visible {
+  visibility: visible;
+}
+.modal-wrap {
+  height: calc(100% - 4rem);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+}
+.modal-header {
+  height: 4rem;
+  text-align: center;
+  line-height: 4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+  font-weight: 400;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+.modal-content {
+  padding: 2rem;
+  overflow: auto;
+  height: calc(100% - 4rem);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }

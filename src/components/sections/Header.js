@@ -10,7 +10,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="container content-wrap bg-silver">
+      <div className="container pb2 bg-silver">
         <div className="bg-white">
           <div className="fit shadow pb3">
             <div className="header-card col-12 sm-col-8">

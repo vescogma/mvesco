@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Header from './Header';
-import About from './About';
-import Skills from './Skills';
-import Projects from './Projects';
-import Contact from './Contact';
+import Header from './sections/Header';
+import About from './sections/About';
+import Skills from './sections/Skills';
+import Projects from './sections/Projects';
+import Contact from './sections/Contact';
+import Modal from './ui/Modal';
 import {
   initializeCards,
   calculateNextCards,
@@ -23,6 +24,7 @@ class App extends Component {
     window.addEventListener('touchstart', this.handleTouchStart);
     window.addEventListener('touchend', this.handleTouchEnd);
     window.addEventListener('touchmove', this.handleTouch);
+    this.setState({ modal: 0 });
   }
 
   componentDidMount() {
@@ -32,9 +34,12 @@ class App extends Component {
     this.handleInit();
   }
 
-  componentWillUpdate = (props, state) => {};
+  componentWillUpdate = (props, state) => {
+    console.log('updating');
+  };
 
-  componentDidUpdate = (props, state) => {};
+  componentDidUpdate = (props, state) => {
+  };
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -45,13 +50,25 @@ class App extends Component {
   }
 
   render() {
+    const modalProps = {
+      toggleProject: this.setModal,
+      visible: !!this.state.modal,
+    }
+    const modal = (
+      <div></div>
+    )
     return (
-      <div ref="wrap" className="card-holder">
-        <Header />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
+      <div>
+        <div ref="wrap" className="card-holder">
+          <Header />
+          <About />
+          <Skills />
+          <Projects toggleProject={ this.setModal } />
+          <Contact />
+        </div>
+        <Modal { ...modalProps }>
+          { modal }
+        </Modal>
       </div>
     );
   }
@@ -175,6 +192,12 @@ class App extends Component {
     this.touches.push(touch);
     if (this.touches.length > 5) {
       this.touches.splice(0, this.touches.length - 5);
+    }
+  };
+
+  setModal = (index) => {
+    if (index !== undefined) {
+      this.setState({ modal : index });
     }
   };
 };
