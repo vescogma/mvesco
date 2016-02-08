@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+// sections components
 import Header from './sections/Header';
 import About from './sections/About';
 import Skills from './sections/Skills';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
+// project components
+import Template from './projects/Template';
+// ui components
 import Modal from './ui/Modal';
 import {
   initializeCards,
@@ -13,6 +17,7 @@ import {
 
 class App extends Component {
   interruptAnimation = false;
+  modalOpen = false;
   touches = [];
   cards = [];
   size = 0;
@@ -24,22 +29,15 @@ class App extends Component {
     window.addEventListener('touchstart', this.handleTouchStart);
     window.addEventListener('touchend', this.handleTouchEnd);
     window.addEventListener('touchmove', this.handleTouch);
-    this.setState({ modal: 0 });
+    this.setState({ modal: 0, title: '', node: undefined });
   }
 
   componentDidMount() {
     this.refs.wrap.style.visibility = 'visible';
     this.size = window.innerHeight;
     this.cards = initializeCards(window.innerHeight, this.refs.wrap.children);
-    this.handleInit();
+    this.initialize();
   }
-
-  componentWillUpdate = (props, state) => {
-    console.log('updating');
-  };
-
-  componentDidUpdate = (props, state) => {
-  };
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -51,24 +49,21 @@ class App extends Component {
 
   render() {
     const modalProps = {
-      toggleProject: this.setModal,
+      toggleProject: this.toggleModal,
+      title: this.state.title,
       visible: !!this.state.modal,
+      children: this.state.node,
     }
-    const modal = (
-      <div></div>
-    )
     return (
       <div>
         <div ref="wrap" className="card-holder">
           <Header />
           <About />
           <Skills />
-          <Projects toggleProject={ this.setModal } />
+          <Projects toggleProject={ this.toggleModal } />
           <Contact />
         </div>
-        <Modal { ...modalProps }>
-          { modal }
-        </Modal>
+        <Modal { ...modalProps } />
       </div>
     );
   }
@@ -77,30 +72,39 @@ class App extends Component {
     this.interruptAnimation = true;
     this.size = window.innerHeight;
     this.cards = initializeCards(window.innerHeight, this.refs.wrap.children);
-    this.handleInit();
+    this.initialize();
+    this.toggleModal(0);
   };
 
   handleScroll = (event) => {
-    this.interruptAnimation = true;
-    this.handleMove(event, 'wheel');
+    if (!this.modalOpen) {
+      this.interruptAnimation = true;
+      this.handleMove(event, 'wheel');
+    }
   };
 
   handleTouchStart = (event) => {
-    this.interruptAnimation = true;
-    const touch = event.touches[0];
-    this.addTouch({ y: touch.clientY, stamp: Date.now() });
+    if (!this.modalOpen) {
+      this.interruptAnimation = true;
+      const touch = event.touches[0];
+      this.addTouch({ y: touch.clientY, stamp: Date.now() });
+    }
   };
 
   handleTouch = (event) => {
-    this.handleMove(event.touches[0], 'touch');
+    if (!this.modalOpen) {
+      this.handleMove(event.touches[0], 'touch');
+    }
   };
 
   handleTouchEnd = (event) => {
-    this.handleRelease(this.touches);
-    this.touches = [];
+    if (!this.modalOpen) {
+      this.handleRelease(this.touches);
+      this.touches = [];
+    }
   };
 
-  handleInit = () => {
+  initialize = () => {
     this.setTransform();
     this.refs.wrap.style.visibility = 'visible';
   };
@@ -195,10 +199,25 @@ class App extends Component {
     }
   };
 
-  setModal = (index) => {
-    if (index !== undefined) {
-      this.setState({ modal : index });
-    }
+  toggleModal = (index) => {
+      let title = '';
+      let node = undefined;
+      switch (index) {
+        case 1:
+          title = 'Template title';
+          node = (
+            <Template />
+          )
+          break;
+        default:
+          title = '';
+          node = (
+            <div></div>
+          )
+          break;
+      }
+      this.modalOpen = !!index;
+      this.setState({ modal: index, title: title, node: node });
   };
 };
 
