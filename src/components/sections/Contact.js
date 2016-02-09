@@ -37,13 +37,13 @@ const Contact = () => {
   return (
     <Card
       title="Contact"
-      colorClass="bg-green">
+      colorClass="contact-title">
       {
         contacts.map((contact, index) => {
           return (
             <a
               key={ index }
-              className="contacts flex-auto green"
+              className="contact flex-auto"
               href={ contact.href }
               target="_blank">
               <div className={ `contact-icon icon-${ contact.icon }` }></div>

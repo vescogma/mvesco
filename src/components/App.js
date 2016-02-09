@@ -28,7 +28,13 @@ class App extends Component {
   touches = [];
   cards = [];
   size = 0;
-  colors = ['#ff4136', '#39cccc', '#0074d9', '#b10dc9', '#ffffff', '#ffffff'];
+  colors = [
+    '#FB6648',
+    '#2471B0',
+    '#5043C9',
+    '#7C4B96',
+    '#75415C',
+  ];
 
   componentWillMount() {
     window.addEventListener('resize', this.handleResize);

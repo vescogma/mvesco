@@ -5,7 +5,7 @@ const About = () => {
   return (
     <Card
       title="About"
-      colorClass="bg-teal">
+      colorClass="about-title">
       <p>
         I am a Developer, Musician, and a Mechatronics Engineering graduate.
       </p><p>

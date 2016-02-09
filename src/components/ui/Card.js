@@ -7,7 +7,7 @@ const Card = ({ children, title, colorClass }) => {
         <div className={ `card-title ${ colorClass }` }>{ title }</div>
         <div className="card-wrap">
           <div className="card-content col-12 sm-col-8">
-            <div className="content-flex bg-darken-1">
+            <div className="content-flex">
               { children }
             </div>
           </div>
