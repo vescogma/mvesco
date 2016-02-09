@@ -5,7 +5,7 @@ const Modal = ({ children, visible, title, toggleProject }) => {
     <div
       className={ `modal ${ !!visible ? 'visible' : '' }` }
       onClick={ () => toggleProject(0) }>
-      <div className="container shadow modal-wrap bg-silver">
+      <div className="modal-wrap">
         <div className="modal-header">
           <div className="modal-title">
             { title }
@@ -16,7 +16,7 @@ const Modal = ({ children, visible, title, toggleProject }) => {
             CLOSE
           </div>
         </div>
-        <div className="modal-content bg-white">
+        <div className="modal-content">
           <div className="fit">
             { children }
           </div>

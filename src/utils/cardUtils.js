@@ -1,25 +1,27 @@
-export function initializeCards(windowHeight, cards) {
-  const cardState = Array.from(cards).map((card, index) => {
-    const cardHeight = card.offsetHeight;
-    return {
-      height: cardHeight,
-      show: false,
-      top: false,
-      min: cardHeight > windowHeight ? windowHeight - cardHeight : 0,
-    };
-  });
+export function initializeCards(windowSize, cards) {
+  const cardState = calculateHeights(windowSize, cards);
   cardState.reduce(function (prev, next) {
-    var target = windowHeight;
-    if (prev < windowHeight) {
-      target = prev;
+    next.offset = windowSize;
+    next.show = false;
+    next.top = false;
+    if (prev < windowSize) {
+      next.offset = prev;
       next.show = true;
     }
-    next.offset = target;
-    return target + next.height;
+    return next.offset + next.height;
   }, 0);
   return cardState;
 }
 
+export function calculateHeights(windowSize, cards) {
+  return cards.map((card, index) => {
+    const cardHeight = card.offsetHeight;
+    return {
+      height: cardHeight,
+      min: cardHeight > windowSize ? windowSize - cardHeight : 0,
+    };
+  });
+}
 export function getDelta(event, type, touches, addTouch) {
   switch (type) {
     case 'touch':
@@ -34,17 +36,19 @@ export function getDelta(event, type, touches, addTouch) {
   }
 }
 
-export function calculateNextCards(cards, delta, windowSize) {
+export function calculateCards(cards, delta, windowSize, nodes) {
   const cardZero = { height: 0, offset: 0, show: true, top: true, min: 0 };
   const cardLast = { height: 0, offset: 0, show: false, top: false, min: 0 };
-  return cards.map(function (card, index) {
-    let newCard = card;
+  const cardState = calculateHeights(windowSize, nodes);
+  return cards.map((card, index) => {
+    card.height = cardState[index].height;
+    card.min = cardState[index].min;
     if (card.show && !card.top) {
       const prev = cards[index - 1] || cardZero;
       const next = cards[index + 1] || cardLast;
-      newCard = moveCard(card, delta, prev, next, index);
+      card = moveCard(card, delta, prev, next, index);
     }
-    return newCard;
+    return card;
   });
 
   function moveCard(card, delta, prev, next, index) {

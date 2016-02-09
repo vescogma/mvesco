@@ -6,12 +6,19 @@ import Skills from './sections/Skills';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
 // project components
-import Template from './projects/Template';
+import Mandelbrot from './projects/Mandelbrot';
+import ModelCar from './projects/ModelCar';
+import RTMotor from './projects/RTMotor';
+import Pillsafe from './projects/Pillsafe';
+import Pacemaker from './projects/Pacemaker';
+import Heliostat from './projects/Heliostat';
 // ui components
 import Modal from './ui/Modal';
+// others
 import {
   initializeCards,
-  calculateNextCards,
+  calculateHeights,
+  calculateCards,
   getDelta,
 } from '../utils/cardUtils';
 
@@ -29,14 +36,15 @@ class App extends Component {
     window.addEventListener('touchstart', this.handleTouchStart);
     window.addEventListener('touchend', this.handleTouchEnd);
     window.addEventListener('touchmove', this.handleTouch);
-    this.setState({ modal: 0, title: '', node: undefined });
+    this.setState({ modal: 0, title: '', component: undefined });
   }
 
   componentDidMount() {
     this.refs.wrap.style.visibility = 'visible';
     this.size = window.innerHeight;
-    this.cards = initializeCards(window.innerHeight, this.refs.wrap.children);
-    this.initialize();
+    this.nodes = Array.from(this.refs.wrap.children);
+    this.cards = initializeCards(this.size, this.nodes);
+    this.setTransform();
   }
 
   componentWillUnmount() {
@@ -52,7 +60,7 @@ class App extends Component {
       toggleProject: this.toggleModal,
       title: this.state.title,
       visible: !!this.state.modal,
-      children: this.state.node,
+      children: this.state.component,
     }
     return (
       <div>
@@ -71,8 +79,9 @@ class App extends Component {
   handleResize = (event) => {
     this.interruptAnimation = true;
     this.size = window.innerHeight;
-    this.cards = initializeCards(window.innerHeight, this.refs.wrap.children);
-    this.initialize();
+    this.nodes = Array.from(this.refs.wrap.children);
+    this.cards = initializeCards(this.size, this.nodes);
+    this.setTransform();
     this.toggleModal(0);
   };
 
@@ -104,16 +113,10 @@ class App extends Component {
     }
   };
 
-  initialize = () => {
-    this.setTransform();
-    this.refs.wrap.style.visibility = 'visible';
-  };
-
   handleMove = (event, type) => {
     const delta = getDelta(event, type, this.touches, this.addTouch);
     if (delta > 0 || delta < 0) {
-      const windowSize = this.size;
-      this.cards = calculateNextCards(this.cards, delta, windowSize);
+      this.cards = calculateCards(this.cards, delta, this.size, this.nodes);
       this.setTransform();
     }
   };
@@ -176,7 +179,7 @@ class App extends Component {
 
   setTransform = () => {
     let prop = '';
-    Array.from(this.refs.wrap.children).map((card, index) => {
+    this.nodes.map((card, index) => {
       prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
       transform(card, prop);
       return card;
@@ -201,23 +204,39 @@ class App extends Component {
 
   toggleModal = (index) => {
       let title = '';
-      let node = undefined;
+      let component = undefined;
       switch (index) {
         case 1:
-          title = 'Template title';
-          node = (
-            <Template />
-          )
+          title = 'Mandelbrot Final Project';
+          component = ( <Mandelbrot /> );
+          break;
+        case 2:
+          title = 'Miniature Car Body Design';
+          component = ( <ModelCar /> );
+          break;
+        case 3:
+          title = 'Real-Time Motor Control';
+          component = ( <RTMotor /> );
+          break;
+        case 4:
+          title = 'Automated Pill Dispenser';
+          component = ( <Pillsafe /> );
+          break;
+        case 5:
+          title = 'Embedded Pacemaker & Monitor';
+          component = ( <Pacemaker /> );
+          break;
+        case 6:
+          title = 'Skylight Reflector Heliostat';
+          component = ( <Heliostat /> );
           break;
         default:
           title = '';
-          node = (
-            <div></div>
-          )
+          component = ( <div></div> );
           break;
       }
       this.modalOpen = !!index;
-      this.setState({ modal: index, title: title, node: node });
+      this.setState({ modal: index, title: title, component: component });
   };
 };
 

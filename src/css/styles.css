@@ -42,7 +42,14 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   width: 100%;
 }
-.content-card {
+.card-container {
+  padding-bottom: 1rem;
+  background-color: #ddd;
+  max-width: 58rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.card-content {
   color: #111;
   padding: 1rem;
   margin-left: auto;
@@ -50,12 +57,12 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 .content-flex {
-  border-radius: 0.5rem;
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
   text-align: left;
   padding: 1rem;
+  background-color: rgba(0,0,0,.0625);
 }
 .card-title {
   color: #fff;
@@ -98,6 +105,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 8rem;
   position: relative;
   top: 8rem;
+  max-width: 58rem;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fff;
 }
 .image-wrap {
   height: 15rem;
@@ -158,6 +169,9 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 2rem;
   margin-bottom: 0.5rem;
 }
+.project-modal-img {
+  margin-bottom: 1rem;
+}
 
 /* contact */
 
@@ -189,6 +203,24 @@ h1, h2, h3, h4, h5, h6 {
   min-width: 2rem;
   min-height: 2rem;
 }
+.contact-icon.icon-email{
+  background-image: url('../assets/email.svg');
+}
+.contact-icon.icon-linkedin{
+  background-image: url('../assets/linkedin.svg');
+}
+.contact-icon.icon-github{
+  background-image: url('../assets/github.svg');
+}
+.contact-icon.icon-facebook{
+  background-image: url('../assets/facebook.svg');
+}
+.contact-icon.icon-google{
+  background-image: url('../assets/google.svg');
+}
+.contact-icon.icon-twitter{
+  background-image: url('../assets/twitter.svg');
+}
 .contact-label {
   display: inline-block;
   vertical-align: top;
@@ -198,6 +230,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* modal */
+
 .modal {
   visibility: hidden;
   position: fixed;
@@ -214,7 +247,9 @@ h1, h2, h3, h4, h5, h6 {
   height: calc(100% - 4rem);
   margin-top: 2rem;
   margin-bottom: 2rem;
-  border-radius: 0.5rem;
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 .modal-header {
   height: 4rem;
@@ -224,15 +259,17 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   padding-left: 1rem;
   display: flex;
+  background-color: #ddd;
 }
 .modal-title {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: left;
 }
 .modal-close {
-  flex: 1 0 auto;
+  flex: none;
   padding-left: 1rem;
   padding-right: 1rem;
   font-size: 1rem;
@@ -240,9 +277,27 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
 }
 .modal-content {
-  padding: 2rem;
   overflow: auto;
   height: calc(100% - 4rem);
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  background-color: #fff;
+}
+
+/* youtube */
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.video-container iframe,
+.video-container object,
+.video-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }

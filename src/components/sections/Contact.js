@@ -2,52 +2,56 @@ import React from 'react';
 import Card from '../ui/Card';
 
 const Contact = () => {
+  const contacts = [
+    {
+      label: 'Email',
+      icon: 'email',
+      href: 'mailto:vescogma@gmail.com',
+    },
+    {
+      label: 'LinkedIn',
+      icon: 'linkedin',
+      href: 'https://ca.linkedin.com/in/miguelvesco',
+    },
+    {
+      label: 'GitHub',
+      icon: 'github',
+      href: 'https://github.com/vescogma',
+    },
+    {
+      label: 'Facebook',
+      icon: 'facebook',
+      href: 'https://facebook.com/miguel.vesco',
+    },
+    {
+      label: 'Google',
+      icon: 'google',
+      href: 'https://plus.google.com/+MiguelVesco',
+    },
+    {
+      label: 'Twitter',
+      icon: 'twitter',
+      href: 'https://twitter.com/@WhyMiguelWhy',
+    },
+  ];
   return (
     <Card
       title="Contact"
       colorClass="bg-green">
-      <a
-        className="contacts flex-auto green"
-        href="mailto:vescogma@gmail.com"
-        target="_blank">
-        <div className="contact-icon"></div>
-        <div className="contact-label">Email</div>
-      </a>
-      <a
-        className="contacts flex-auto green"
-        href="https://ca.linkedin.com/in/miguelvesco"
-        target="_blank">
-        <div className="contact-icon"></div>
-        <div className="contact-label">LinkedIn</div>
-      </a>
-      <a
-        className="contacts flex-auto green"
-        href="https://github.com/vescogma"
-        target="_blank">
-        <div className="contact-icon"></div>
-        <div className="contact-label">GitHub</div>
-      </a>
-      <a
-        className="contacts flex-auto green"
-        href="https://facebook.com/miguel.vesco"
-        target="_blank">
-        <div className="contact-icon"></div>
-        <div className="contact-label">Facebook</div>
-      </a>
-      <a
-        className="contacts flex-auto green"
-        href="https://plus.google.com/+MiguelVesco"
-        target="_blank">
-        <div className="contact-icon"></div>
-        <div className="contact-label">Google</div>
-      </a>
-      <a
-        className="contacts flex-auto green"
-        href="https://twitter.com/@WhyMiguelWhy"
-        target="_blank">
-        <div className="contact-icon"></div>
-        <div className="contact-label">Twitter</div>
-      </a>
+      {
+        contacts.map((contact, index) => {
+          return (
+            <a
+              key={ index }
+              className="contacts flex-auto green"
+              href={ contact.href }
+              target="_blank">
+              <div className={ `contact-icon icon-${ contact.icon }` }></div>
+              <div className="contact-label">{ contact.label }</div>
+            </a>
+          );
+        })
+      }
     </Card>
   )
 }
