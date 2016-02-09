@@ -11,7 +11,7 @@ const Header = () => {
         </div>
       </div>
       <div className="card-container">
-        <div className="fit shadow pb3 bg-white">
+        <div className="card-wrap">
           <div className="header-card col-12 sm-col-8">
             <div className="p2 image-wrap mx-auto">
               <img className="circle image-max" src="assets/me-small.jpg" />
