@@ -14,7 +14,7 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: Ubuntu, Helvetica, sans-serif;
-  background-color: #222;
+  background-color: #DDD;
 }
 h1, h2, h3, h4, h5, h6 {
   font-family: Ubuntu, Helvetica, sans-serif;
@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .card-container {
   padding-bottom: 1rem;
-  background-color: #222;
+  background-color: #DDD;
   max-width: 58rem;
   margin-left: auto;
   margin-right: auto;
@@ -62,32 +62,25 @@ h1, h2, h3, h4, h5, h6 {
   flex-wrap: wrap;
   text-align: left;
   padding: 1rem;
-  background-color: rgba(0,0,0,0.125);
+  background-color: rgba(0,0,0,0.06);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 .card-title {
-  color: #EEE;
+  color: #F9F9F9;
   padding: 1rem;
   max-width: 100%;
   text-align: center;
   font-weight: 700;
   font-size: 1.5rem;
-  border-bottom: 0.125rem solid #FB6648;
 }
 .card-wrap {
   width: 100%;
   padding-bottom: 2rem;
-  color: #EEE;
-  background-color: #474640;
-  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-}
-.rounded {
-  border-radius: 0.5rem;
+  color: #222;
+  background-color: #F9F9F9;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 .shadow {
-  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
   box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
 }
 .about-title {
@@ -97,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #5043C9;
 }
 .projects-title {
-  background-color: #7C4B96;
+  background-color: #743596;
 }
 .contact-title {
   background-color: #75415C;
@@ -117,9 +110,11 @@ h1, h2, h3, h4, h5, h6 {
 .header {
   width: 100%;
   height: 16rem;
-  -webkit-transition: background-color 0.25s ease;
-  -moz-transition: background-color 0.25s ease;
-  -ms-transition: background-color 0.25s ease;
+  background-image: url('../assets/banner.jpg');
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 -3px 6px rgba(0,0,0,0.15);
   transition: background-color 0.25s ease;
 }
 .header-inner {
@@ -129,11 +124,12 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 58rem;
   margin-left: auto;
   margin-right: auto;
-  background-color: #474640;
+  background-color: #F9F9F9;
+  /*box-shadow: 3px -3px 3px rgba(0,0,0,0.15);*/
 }
 .header-title {
   padding-top: 4rem;
-  color: #FFF;
+  color: #222;
   text-align: center;
   font-weight: bold;
   font-size: 1.25rem;
@@ -148,13 +144,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* skills */
-
+.skills-col {
+  flex: 1 0 auto;
+}
+.skills-content {
+  padding: 1rem;
+}
 .skills-header {
   font-size: 1.25rem;
   padding: 1rem;
-  background-color: rgba(0,0,0,0.125);
-  color: #EEE;
-  border-bottom: 0.125rem solid #FB6648;
+  background-color: rgba(0,0,0,0.06);
+  color: #5043C9;
 }
 
 /* projects */
@@ -163,13 +163,19 @@ h1, h2, h3, h4, h5, h6 {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgba(0,0,0,0.125);
+  background-color: rgba(0,0,0,0.06);
   height: 8rem;
   min-width: 12rem;
   position: relative;
   margin: 0.5rem;
   cursor: pointer;
-  color: #FB6648;
+  color: #743596;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+.project:hover{
+  background-color: rgba(255,255,255,0.225);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.20);
 }
 .project-image {
   position: absolute;
@@ -188,16 +194,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 8rem;
   width: 100%;
   padding-top: 2rem;
-  -webkit-transition: background-color 0.5s ease, box-shadow 0.5s ease;
-  -moz-transition: background-color 0.5s ease, box-shadow 0.5s ease;
-  -ms-transition: background-color 0.5s ease, box-shadow 0.5s ease;
-  transition: background-color 0.5s ease, box-shadow 0.5s ease;
-}
-.project-title:hover{
-  background-color: #54534C;
-  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
 }
 .project-icon {
   background-image: url('../assets/default.svg');
@@ -219,19 +215,15 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1rem;
   padding-left: 2rem;
   margin: 0.5rem;
-  color: #FB6648;
-  background-color: rgba(0,0,0,0.125);
+  color: #75415C;
+  background-color: rgba(0,0,0,0.06);
   cursor: pointer;
-  -webkit-transition: background-color 0.5s ease, box-shadow 0.5s ease;
-  -moz-transition: background-color 0.5s ease, box-shadow 0.5s ease;
-  -ms-transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 .contact:hover {
-  background-color: #54534C;
-  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+  background-color: rgba(255,255,255,0.225);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.20);
 }
 .contact-icon {
   display: inline-block;
@@ -278,7 +270,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.25);
 }
 .modal.visible {
   visibility: visible;
@@ -290,6 +282,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
 }
 .modal-header {
   height: 4rem;
@@ -299,7 +292,8 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   padding-left: 1rem;
   display: flex;
-  background-color: #AAA;
+  align-items: center;
+  background-color: rgba(240,240,240,1);
 }
 .modal-title {
   flex: 1 1 auto;
@@ -312,15 +306,25 @@ h1, h2, h3, h4, h5, h6 {
   flex: none;
   padding-left: 1rem;
   padding-right: 1rem;
+  margin-right: 1rem;
+  height: 2rem;
+  line-height: 2rem;
   font-size: 1rem;
   font-weight: 400;
   cursor: pointer;
+  background-color: rgba(0,0,0,0.06);
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+.modal-close:hover {
+  background-color: rgba(255,255,255,0.225);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.20);
 }
 .modal-content {
   overflow: auto;
   height: calc(100% - 4rem);
-  background-color: #474640;
-  color: #EEE;
+  background-color: #F9F9F9;
+  color: #222;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
 }
 
 /* youtube */

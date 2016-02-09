@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 const Header = () => {
   return (
     <div className="card">
-      <div id="header" className="header bg-red">
+      <div id="header" className="header">
         <div className="header-inner">
           <div className="header-title">
             Hello, my name is Miguel Vesco.
