@@ -13,11 +13,11 @@ const Projects = ({ toggleProject }) => {
   return (
     <Card
       title="Projects"
-      colorClass="bg-purple">
+      colorClass="projects-title">
       {
         projects.map((project, index) => {
           return (
-            <div key={ index } className="flex-auto purple">
+            <div key={ index } className="flex-auto">
               <div
                 className="project"
                 onClick={ () => toggleProject(index + 1) }>

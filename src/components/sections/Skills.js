@@ -5,9 +5,9 @@ const Skills = () => {
   return (
     <Card
       title="Skills"
-      colorClass="bg-blue">
+      colorClass="skills-title">
       <div className="flex-grow">
-        <div className="h3 p2 bg-darken-1 blue">Web</div>
+        <div className="skills-header">Web</div>
         <div className="p2">
           <div>&bull;&nbsp;&nbsp;React</div>
           <div>&bull;&nbsp;&nbsp;Angular 2</div>
@@ -21,7 +21,7 @@ const Skills = () => {
         </div>
       </div>
       <div className="flex-grow">
-        <div className="h3 p2 bg-darken-1 blue">Coding</div>
+        <div className="skills-header">Coding</div>
         <div className="p2">
           <div>&bull;&nbsp;&nbsp;Javascript</div>
           <div>&bull;&nbsp;&nbsp;HTML</div>
@@ -35,7 +35,7 @@ const Skills = () => {
         </div>
       </div>
       <div className="flex-grow">
-        <div className="h3 p2 bg-darken-1 blue">Technologies</div>
+        <div className="skills-header">Technologies</div>
         <div className="p2">
           <div>&bull;&nbsp;&nbsp;SDLC, Agile, XP</div>
           <div>&bull;&nbsp;&nbsp;UX & UI Design</div>
