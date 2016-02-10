@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-wrap: wrap;
   text-align: left;
   padding: 1rem;
-  background-color: rgba(0,0,0,0.06);
+  background-color: rgba(0,0,0,0.075);
   box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 .card-title {
@@ -84,16 +84,16 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
 }
 .about-title {
-  background-color: #2471B0;
+  background-color: #2196F3;
 }
 .skills-title {
-  background-color: #5043C9;
+  background-color: #3E59E0;
 }
 .projects-title {
-  background-color: #743596;
+  background-color: #713ACE;
 }
 .contact-title {
-  background-color: #75415C;
+  background-color: #9C27B0;
 }
 
 /* header */
@@ -109,8 +109,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .header {
   width: 100%;
-  height: 16rem;
-  background-image: url('../assets/banner.jpg');
+  height: 20rem;
+  background-image: url('../assets/banner.svg');
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -118,14 +118,13 @@ h1, h2, h3, h4, h5, h6 {
   transition: background-color 0.25s ease;
 }
 .header-inner {
-  height: 8rem;
+  height: 12rem;
   position: relative;
-  top: 8rem;
+  top: 12rem;
   max-width: 58rem;
   margin-left: auto;
   margin-right: auto;
   background-color: #F9F9F9;
-  /*box-shadow: 3px -3px 3px rgba(0,0,0,0.15);*/
 }
 .header-title {
   padding-top: 4rem;
@@ -153,8 +152,8 @@ h1, h2, h3, h4, h5, h6 {
 .skills-header {
   font-size: 1.25rem;
   padding: 1rem;
-  background-color: rgba(0,0,0,0.06);
-  color: #5043C9;
+  background-color: rgba(0,0,0,0.075);
+  color: #3E59E0;
 }
 
 /* projects */
@@ -163,14 +162,14 @@ h1, h2, h3, h4, h5, h6 {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgba(0,0,0,0.06);
+  background-color: rgba(0,0,0,0.075);
   height: 8rem;
   min-width: 12rem;
   position: relative;
   margin: 0.5rem;
   cursor: pointer;
-  color: #743596;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  color: #713ACE;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 .project:hover{
@@ -215,10 +214,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1rem;
   padding-left: 2rem;
   margin: 0.5rem;
-  color: #75415C;
-  background-color: rgba(0,0,0,0.06);
+  color: #9C27B0;
+  background-color: rgba(0,0,0,0.075);
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 .contact:hover {
@@ -272,8 +271,17 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 0;
   background-color: rgba(0,0,0,0.25);
 }
-.modal.visible {
+.modal.visible, .modal-cover.visible {
   visibility: visible;
+}
+.modal-cover{
+  visibility: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.25);
 }
 .modal-wrap {
   height: calc(100% - 4rem);
@@ -312,7 +320,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1rem;
   font-weight: 400;
   cursor: pointer;
-  background-color: rgba(0,0,0,0.06);
+  background-color: rgba(0,0,0,0.075);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 .modal-close:hover {

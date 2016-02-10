@@ -5,7 +5,9 @@ const Modal = ({ children, visible, title, toggleProject }) => {
     <div
       className={ `modal ${ !!visible ? 'visible' : '' }` }
       onClick={ () => toggleProject(0) }>
-      <div className="modal-wrap">
+      <div
+        className="modal-wrap"
+        onClick={ (e) => e.stopPropagation() }>
         <div className="modal-header">
           <div className="modal-title">
             { title }

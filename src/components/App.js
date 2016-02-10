@@ -30,11 +30,11 @@ class App extends Component {
   touches = [];
   size = 0;
   colors = [
-    { color: '#222222', image: 'url(\'./assets/banner.jpg\')' },
-    { color: '#2471B0', image: 'none' },
-    { color: '#5043C9', image: 'none' },
-    { color: '#743596', image: 'none' },
-    { color: '#75415C', image: 'none' },
+    { color: '#01579B', image: 'url(\'./assets/banner.svg\')' },
+    { color: '#2196F3', image: 'none' },
+    { color: '#3E59E0', image: 'none' },
+    { color: '#713ACE', image: 'none' },
+    { color: '#9C27B0', image: 'none' },
   ];
 
   componentWillMount() {
@@ -87,7 +87,7 @@ class App extends Component {
     this.interruptAnimation = true;
     this.size = window.innerHeight;
     this.nodes = Array.from(this.refs.wrap.children);
-    this.cards = initializeCards(this.size, this.nodes);
+    this.cards = initializeCards(this.nodes, this.size);
     this.setTransform();
   };
 
