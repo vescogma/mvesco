@@ -17,6 +17,7 @@ import Modal from './ui/Modal';
 // others
 import {
   initializeCards,
+  setHeights,
   calculateHeights,
   calculateCards,
   getDelta,
@@ -24,16 +25,16 @@ import {
 
 class App extends Component {
   interruptAnimation = false;
+  firstTouch = false;
   modalOpen = false;
   touches = [];
-  cards = [];
   size = 0;
   colors = [
-    '#FB6648',
-    '#2471B0',
-    '#5043C9',
-    '#7C4B96',
-    '#75415C',
+    { color: '#01579B', image: 'url(\'./assets/banner.svg\')' },
+    { color: '#2196F3', image: 'none' },
+    { color: '#3E59E0', image: 'none' },
+    { color: '#713ACE', image: 'none' },
+    { color: '#9C27B0', image: 'none' },
   ];
 
   componentWillMount() {
@@ -49,7 +50,7 @@ class App extends Component {
     this.refs.wrap.style.visibility = 'visible';
     this.size = window.innerHeight;
     this.nodes = Array.from(this.refs.wrap.children);
-    this.cards = initializeCards(this.size, this.nodes);
+    this.cards = initializeCards(this.nodes, this.size);
     this.setTransform();
   }
 
@@ -86,12 +87,16 @@ class App extends Component {
     this.interruptAnimation = true;
     this.size = window.innerHeight;
     this.nodes = Array.from(this.refs.wrap.children);
-    this.cards = initializeCards(this.size, this.nodes);
+    this.cards = initializeCards(this.nodes, this.size);
     this.setTransform();
-    this.toggleModal(0);
   };
 
   handleScroll = (event) => {
+    if (!this.firstTouch) {
+      this.nodes = Array.from(this.refs.wrap.children);
+      this.cards = setHeights(this.cards, this.nodes, this.size);
+      this.firstTouch = true;
+    }
     if (!this.modalOpen) {
       this.interruptAnimation = true;
       this.handleMove(event, 'wheel');
@@ -99,6 +104,11 @@ class App extends Component {
   };
 
   handleTouchStart = (event) => {
+    if (!this.firstTouch) {
+      this.nodes = Array.from(this.refs.wrap.children);
+      this.cards = setHeights(this.cards, this.nodes, this.size);
+      this.firstTouch = true;
+    }
     if (!this.modalOpen) {
       this.interruptAnimation = true;
       const touch = event.touches[0];
@@ -173,14 +183,15 @@ class App extends Component {
   };
 
   setBannerColor = () => {
-    const colorIndex = this.cards.reduce((prev, next, index) => {
+    const index = this.cards.reduce((prev, next, index) => {
       if (next.top === true) {
         return index;
       }
       return prev;
     }, 0)
     const header = document.getElementById('header');
-    header.style.backgroundColor = this.colors[colorIndex];
+    header.style.backgroundColor = this.colors[index].color;
+    header.style.backgroundImage = this.colors[index].image;
   };
 
   setTransform = () => {
@@ -196,7 +207,6 @@ class App extends Component {
       node.style.WebkitTransform = transformProp;
       node.style.MozTransform = transformProp;
       node.style.msTransform = transformProp;
-      node.style.OTransform = transformProp;
       node.style.transform = transformProp;
     };
   };

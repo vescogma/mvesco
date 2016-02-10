@@ -6,9 +6,9 @@ const Skills = () => {
     <Card
       title="Skills"
       colorClass="skills-title">
-      <div className="flex-grow">
+      <div className="skills-col">
         <div className="skills-header">Web</div>
-        <div className="p2">
+        <div className="skills-content">
           <div>&bull;&nbsp;&nbsp;React</div>
           <div>&bull;&nbsp;&nbsp;Angular 2</div>
           <div>&bull;&nbsp;&nbsp;jQuery</div>
@@ -20,9 +20,9 @@ const Skills = () => {
           <div>&bull;&nbsp;&nbsp;PostgreSQL</div>
         </div>
       </div>
-      <div className="flex-grow">
+      <div className="skills-col">
         <div className="skills-header">Coding</div>
-        <div className="p2">
+        <div className="skills-content">
           <div>&bull;&nbsp;&nbsp;Javascript</div>
           <div>&bull;&nbsp;&nbsp;HTML</div>
           <div>&bull;&nbsp;&nbsp;CSS</div>
@@ -34,9 +34,9 @@ const Skills = () => {
           <div>&bull;&nbsp;&nbsp;PLC</div>
         </div>
       </div>
-      <div className="flex-grow">
+      <div className="skills-col">
         <div className="skills-header">Technologies</div>
-        <div className="p2">
+        <div className="skills-content">
           <div>&bull;&nbsp;&nbsp;SDLC, Agile, XP</div>
           <div>&bull;&nbsp;&nbsp;UX & UI Design</div>
           <div>&bull;&nbsp;&nbsp;DB Administration</div>

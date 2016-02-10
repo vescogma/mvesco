@@ -1,27 +1,38 @@
-export function initializeCards(windowSize, cards) {
-  const cardState = calculateHeights(windowSize, cards);
-  cardState.reduce(function (prev, next) {
-    next.offset = windowSize;
-    next.show = false;
-    next.top = false;
-    if (prev < windowSize) {
-      next.offset = prev;
-      next.show = true;
+export function initializeCards(nodes, size) {
+  const cards = calculateHeights(nodes, size);
+  cards.reduce(function (prev, next, index) {
+    cards[index].top = false;
+    if (prev < size) {
+      cards[index].offset = prev;
+      cards[index].show = true;
+    } else {
+      cards[index].offset = size;
+      cards[index].show = false;
     }
-    return next.offset + next.height;
+    return cards[index].offset + next.height;
   }, 0);
-  return cardState;
+  return cards;
 }
 
-export function calculateHeights(windowSize, cards) {
+export function setHeights(cards, nodes, size) {
+  const heights = calculateHeights(nodes, size);
   return cards.map((card, index) => {
-    const cardHeight = card.offsetHeight;
+    card.height = heights[index].height;
+    card.min = heights[index].min;
+    return card;
+  });
+}
+
+export function calculateHeights(nodes, size) {
+  return nodes.map((card, index) => {
+    const height = card.offsetHeight;
     return {
-      height: cardHeight,
-      min: cardHeight > windowSize ? windowSize - cardHeight : 0,
+      height: height,
+      min: height > size ? size - height : 0,
     };
   });
 }
+
 export function getDelta(event, type, touches, addTouch) {
   switch (type) {
     case 'touch':
@@ -36,74 +47,74 @@ export function getDelta(event, type, touches, addTouch) {
   }
 }
 
-export function calculateCards(cards, delta, windowSize, nodes) {
+export function calculateCards(cards, delta, size) {
   const cardZero = { height: 0, offset: 0, show: true, top: true, min: 0 };
   const cardLast = { height: 0, offset: 0, show: false, top: false, min: 0 };
-  const cardState = calculateHeights(windowSize, nodes);
   return cards.map((card, index) => {
-    card.height = cardState[index].height;
-    card.min = cardState[index].min;
     if (card.show && !card.top) {
       const prev = cards[index - 1] || cardZero;
       const next = cards[index + 1] || cardLast;
-      card = moveCard(card, delta, prev, next, index);
+      if (card.offset - delta + card.height <= size) {
+        next.show = true;
+      }
+      if (delta > 0) {
+        card = deltaPos(card, delta, prev, index, size, cards);
+      } else {
+        card = deltaNeg(card, delta, prev, size);
+      }
     }
     return card;
   });
+}
 
-  function moveCard(card, delta, prev, next, index) {
-    const newCard = checkOffset(card, delta, prev, next, index);
-    if (delta > 0) {
-      newCard.offset = checkMaximum(index, card.offset);
-    }
-    return newCard;
-  };
+function deltaPos(card, delta, prev, index, size, cards) {
+  card.offset = scrollDown(card, delta, prev, index, cards.length);
+  if (card.offset >= size) {
+    card.offset = size;
+    card.show = false;
+  }
+  card.offset = checkMaximum(index, card.offset, size, cards);
+  return card;
+}
 
-  function checkOffset(card, delta, prev, next, index) {
-    const newCard = card;
-    if (card.offset - delta + card.height <= windowSize) {
-      next.show = true;
-    }
-    if (delta > 0) {
-      // SCROLL DOWN
-      const abovePrevCardBottom = !prev.top
-        && card.offset - delta < prev.height + prev.offset;
-      if (card.offset - delta < card.min) {
-        newCard.offset = card.min;
-        if (index < cards.length - 1) {
-          newCard.top = true;
-        }
-      } else if (abovePrevCardBottom) {
-        newCard.offset = prev.height + prev.offset;
-      } else {
-        newCard.offset = card.offset - delta;
-      }
-    } else {
-      // SCROLL UP
-      if (card.offset - delta >= prev.height + prev.offset) {
-        newCard.offset = prev.height + prev.offset;
-        prev.top = false;
-      } else {
-        newCard.offset = card.offset - delta;
-      }
-    }
-    if (newCard.offset >= windowSize) {
-      newCard.offset = windowSize;
-      newCard.show = false;
-    }
-    return newCard;
-  };
+function deltaNeg(card, delta, prev, size) {
+  card.offset = scrollUp(card, delta, prev);
+  if (card.offset >= size) {
+    card.offset = size;
+    card.show = false;
+  }
+  return card;
+}
 
-  function checkMaximum(cardIndex, offset) {
-    var heightLeft = cards.reduce(function (prev, next, index) {
-      if (index > cardIndex - 1) {
-        return next.height + prev;
-      }
-      return prev;
-    }, 0);
-    if (heightLeft + offset < windowSize) {
-      return windowSize - heightLeft;
+function scrollDown(card, delta, prev, index, length) {
+  if (card.offset - delta < card.min) {
+    if (index < length - 1) {
+      card.top = true;
     }
-    return offset;
-  };
+    return card.min;
+  } else if (!prev.top && card.offset - delta < prev.height + prev.offset) {
+    return prev.height + prev.offset;
+  }
+  return card.offset - delta;
+}
+
+function scrollUp(card, delta, prev) {
+  if (card.offset - delta >= prev.height + prev.offset) {
+    prev.top = false;
+    return prev.height + prev.offset;
+  }
+  return card.offset - delta;
+}
+
+function checkMaximum(cardIndex, offset, size, cards) {
+  var total = cards.reduce((prev, next, index) => {
+    if (index > cardIndex - 1) {
+      return next.height + prev;
+    }
+    return prev;
+  }, 0);
+  if (total + offset < size) {
+    return size - total;
+  }
+  return offset;
 }
