@@ -153,8 +153,8 @@ class App extends Component {
 
   scrollTo = (velocity, specific) => {
     let amplitude = 0;
+    // maybe one day
     let target = specific;
-    const move = this.handleMove;
     let moved = 0;
     if (!target) {
       amplitude = 0.6 * velocity;
@@ -164,25 +164,31 @@ class App extends Component {
     }
     const start = Date.now();
     this.interruptAnimation = false;
-    requestAnimationFrame(animateRelease.bind(this));
+    requestAnimationFrame(
+      this.animateRelease(start, amplitude, target, moved)
+    );
+  };
 
-    function animateRelease() {
+  animateRelease = (start, amplitude, target, moved) => {
+    return () => {
       if (!this.interruptAnimation) {
         const elapsed = Date.now() - start;
         const remainder = -amplitude * Math.exp(-elapsed / 325);
         const toMove = target + remainder - moved;
         if (remainder > 1 || remainder < -1) {
           moved = target + remainder;
-          move(Math.round(toMove), 'offset');
-          requestAnimationFrame(animateRelease.bind(this));
+          this.handleMove(Math.round(toMove), 'offset');
+          requestAnimationFrame(
+            this.animateRelease(start, amplitude, target, moved)
+          );
         } else {
-          move(Math.round(remainder), 'offset');
+          this.handleMove(Math.round(remainder), 'offset');
         }
       }
-    }
+    };
   };
 
-  setBannerColor = () => {
+  setBannerColor() {
     const index = this.cards.reduce((prev, next, index) => {
       if (next.top === true) {
         return index;
