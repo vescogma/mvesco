@@ -133,11 +133,11 @@ class App extends Component {
     const delta = getDelta(event, type, this.touches, this.addTouch);
     if (delta > 0 || delta < 0) {
       this.cards = calculateCards(this.cards, delta, this.size, this.nodes);
-      this.setTransform();
+      this.setTransform()
     }
   };
 
-  handleRelease = (touches) => {
+  handleRelease(touches) {
     let velocity = 0;
     touches.reduce(function (prev, next) {
       const elapsed = next.stamp - prev.stamp;
@@ -151,7 +151,7 @@ class App extends Component {
     }
   };
 
-  scrollTo = (velocity, specific) => {
+  scrollTo(velocity, specific) {
     let amplitude = 0;
     // maybe one day
     let target = specific;
@@ -164,12 +164,10 @@ class App extends Component {
     }
     const start = Date.now();
     this.interruptAnimation = false;
-    requestAnimationFrame(
-      this.animateRelease(start, amplitude, target, moved)
-    );
+    requestAnimationFrame(this.release(start, amplitude, target, moved));
   };
 
-  animateRelease = (start, amplitude, target, moved) => {
+  release = (start, amplitude, target, moved) => {
     return () => {
       if (!this.interruptAnimation) {
         const elapsed = Date.now() - start;
@@ -178,9 +176,7 @@ class App extends Component {
         if (remainder > 1 || remainder < -1) {
           moved = target + remainder;
           this.handleMove(Math.round(toMove), 'offset');
-          requestAnimationFrame(
-            this.animateRelease(start, amplitude, target, moved)
-          );
+          requestAnimationFrame(this.release(start, amplitude, target, moved));
         } else {
           this.handleMove(Math.round(remainder), 'offset');
         }
@@ -200,7 +196,7 @@ class App extends Component {
     header.style.backgroundImage = this.colors[index].image;
   };
 
-  setTransform = () => {
+  setTransform() {
     let prop = '';
     this.nodes.map((card, index) => {
       prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
@@ -225,40 +221,40 @@ class App extends Component {
   };
 
   toggleModal = (index) => {
-      let title = '';
-      let component = undefined;
-      switch (index) {
-        case 1:
-          title = 'Mandelbrot Final Project';
-          component = ( <Mandelbrot /> );
-          break;
-        case 2:
-          title = 'Miniature Car Body Design';
-          component = ( <ModelCar /> );
-          break;
-        case 3:
-          title = 'Real-Time Motor Control';
-          component = ( <RTMotor /> );
-          break;
-        case 4:
-          title = 'Automated Pill Dispenser';
-          component = ( <Pillsafe /> );
-          break;
-        case 5:
-          title = 'Embedded Pacemaker & Monitor';
-          component = ( <Pacemaker /> );
-          break;
-        case 6:
-          title = 'Skylight Reflector Heliostat';
-          component = ( <Heliostat /> );
-          break;
-        default:
-          title = '';
-          component = ( <div></div> );
-          break;
-      }
-      this.modalOpen = !!index;
-      this.setState({ modal: index, title: title, component: component });
+    let title = '';
+    let component = undefined;
+    switch (index) {
+      case 1:
+        title = 'Mandelbrot Final Project';
+        component = ( <Mandelbrot /> );
+        break;
+      case 2:
+        title = 'Miniature Car Body Design';
+        component = ( <ModelCar /> );
+        break;
+      case 3:
+        title = 'Real-Time Motor Control';
+        component = ( <RTMotor /> );
+        break;
+      case 4:
+        title = 'Automated Pill Dispenser';
+        component = ( <Pillsafe /> );
+        break;
+      case 5:
+        title = 'Embedded Pacemaker & Monitor';
+        component = ( <Pacemaker /> );
+        break;
+      case 6:
+        title = 'Skylight Reflector Heliostat';
+        component = ( <Heliostat /> );
+        break;
+      default:
+        title = '';
+        component = ( <div></div> );
+        break;
+    }
+    this.modalOpen = !!index;
+    this.setState({ modal: index, title: title, component: component });
   };
 };
 

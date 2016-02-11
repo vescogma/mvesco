@@ -68,12 +68,11 @@ export function calculateCards(cards, delta, size) {
 }
 
 function deltaPos(card, delta, prev, index, size, cards) {
-  card.offset = scrollDown(card, delta, prev, index, cards.length);
+  card.offset = scrollDown(card, delta, prev, index, cards, size);
   if (card.offset >= size) {
     card.offset = size;
     card.show = false;
   }
-  card.offset = checkMaximum(index, card.offset, size, cards);
   return card;
 }
 
@@ -86,16 +85,17 @@ function deltaNeg(card, delta, prev, size) {
   return card;
 }
 
-function scrollDown(card, delta, prev, index, length) {
-  if (card.offset - delta < card.min) {
-    if (index < length - 1) {
+function scrollDown(card, delta, prev, index, cards, size) {
+  const newOffset = checkMaximum(index, card.offset - delta, size, cards);
+  if (newOffset < card.min) {
+    if (index < cards.length - 1) {
       card.top = true;
     }
     return card.min;
-  } else if (!prev.top && card.offset - delta < prev.height + prev.offset) {
+  } else if (!prev.top && newOffset < prev.height + prev.offset) {
     return prev.height + prev.offset;
   }
-  return card.offset - delta;
+  return newOffset;
 }
 
 function scrollUp(card, delta, prev) {
