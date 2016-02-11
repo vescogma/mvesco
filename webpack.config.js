@@ -1,9 +1,11 @@
 module.exports = {
   entry: './src/index.js',
+  devtool: 'source-map',
   output: {
     path: 'build',
     filename: 'bundle.js',
     publicPath: '/',
+    sourceMapFilename: 'bundle.map.js',
   },
   module: {
     loaders: [
