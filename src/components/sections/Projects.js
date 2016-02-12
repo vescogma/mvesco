@@ -3,28 +3,28 @@ import Card from '../ui/Card';
 
 const Projects = ({ toggleProject }) => {
   const projects = [
-    'Mandelbrot Final Project',
-    'Miniature Car Body Design',
-    'Real-Time Motor Control',
-    'Automated Pill Dispenser',
-    'Embedded Pacemaker & Monitor',
-    'Skylight Reflector Heliostat',
-  ]
+    { label: 'Mandelbrot Final Project', icon: 'mandelbrot' },
+    { label: 'Miniature Car Body Design', icon: 'carbody' },
+    { label: 'Real-Time Motor Control', icon: 'default' },
+    { label: 'Automated Pill Dispenser', icon: 'default' },
+    { label: 'Embedded Pacemaker & Monitor', icon: 'default' },
+    { label: 'Skylight Reflector Heliostat', icon: 'default' },
+  ];
   return (
     <Card
       title="Projects"
       colorClass="projects-title">
       {
-        projects.map((project, index) => {
+        projects.map((p, i) => {
           return (
-            <div key={ index } className="flex-auto">
+            <div key={ i } className="flex-auto">
               <div
                 className="project"
-                onClick={ () => toggleProject(index + 1) }>
+                onClick={ () => toggleProject(i + 1) }>
                 <div className="project-image"></div>
                 <div className="project-title">
-                  <div className="project-icon"></div>
-                  { project }
+                  <div className={ `project-icon icon-${ p.icon }` }></div>
+                  { p.label }
                 </div>
               </div>
             </div>

@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
 .header {
   width: 100%;
   height: 20rem;
-  background-image: url('../assets/banner.svg');
+  background-image: url('../assets/images/banner.svg');
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -193,15 +193,26 @@ h1, h2, h3, h4, h5, h6 {
   height: 8rem;
   width: 100%;
   padding-top: 2rem;
+  line-height: 1.25rem;
 }
 .project-icon {
-  background-image: url('../assets/default.svg');
+  background-image: url('../assets/icons/default.svg');
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  min-width: 2rem;
+  min-width: 3rem;
+  max-width: 6rem;
   min-height: 2rem;
+  margin: 0 auto;
   margin-bottom: 0.5rem;
+}
+.project-icon.icon-mandelbrot{
+  background-image: url('../assets/icons/projects/mandelbrot.svg');
+  background-size: cover;
+  background-position: 50% 100%;
+}
+.project-icon.icon-carbody{
+  background-image: url('../assets/icons/projects/carbody.svg');
 }
 .project-modal-img {
   margin-bottom: 1rem;
@@ -227,7 +238,7 @@ h1, h2, h3, h4, h5, h6 {
 .contact-icon {
   display: inline-block;
   vertical-align: top;
-  background-image: url('../assets/default.svg');
+  background-image: url('../assets/icons/default.svg');
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -235,22 +246,22 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 2rem;
 }
 .contact-icon.icon-email{
-  background-image: url('../assets/email.svg');
+  background-image: url('../assets/icons/contacts/email.svg');
 }
 .contact-icon.icon-linkedin{
-  background-image: url('../assets/linkedin.svg');
+  background-image: url('../assets/icons/contacts/linkedin.svg');
 }
 .contact-icon.icon-github{
-  background-image: url('../assets/github.svg');
+  background-image: url('../assets/icons/contacts/github.svg');
 }
 .contact-icon.icon-facebook{
-  background-image: url('../assets/facebook.svg');
+  background-image: url('../assets/icons/contacts/facebook.svg');
 }
 .contact-icon.icon-google{
-  background-image: url('../assets/google.svg');
+  background-image: url('../assets/icons/contacts/google.svg');
 }
 .contact-icon.icon-twitter{
-  background-image: url('../assets/twitter.svg');
+  background-image: url('../assets/icons/contacts/twitter.svg');
 }
 .contact-label {
   display: inline-block;

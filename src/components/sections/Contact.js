@@ -39,15 +39,15 @@ const Contact = () => {
       title="Contact"
       colorClass="contact-title">
       {
-        contacts.map((contact, index) => {
+        contacts.map((c, i) => {
           return (
             <a
-              key={ index }
+              key={ i }
               className="contact flex-auto"
-              href={ contact.href }
+              href={ c.href }
               target="_blank">
-              <div className={ `contact-icon icon-${ contact.icon }` }></div>
-              <div className="contact-label">{ contact.label }</div>
+              <div className={ `contact-icon icon-${ c.icon }` }></div>
+              <div className="contact-label">{ c.label }</div>
             </a>
           );
         })

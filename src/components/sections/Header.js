@@ -14,7 +14,7 @@ const Header = () => {
         <div className="card-wrap">
           <div className="header-card col-12 sm-col-8">
             <div className="p2 image-wrap mx-auto">
-              <img className="circle image-max" src="assets/me-small.jpg" />
+              <img className="circle image-max" src="assets/images/me.jpg" />
             </div>
           </div>
         </div>
