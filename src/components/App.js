@@ -30,7 +30,7 @@ class App extends Component {
   touches = [];
   size = 0;
   colors = [
-    { color: '#01579B', image: 'url(\'./assets/banner.svg\')' },
+    { color: '#01579B', image: 'url(\'./assets/images/banner.svg\')' },
     { color: '#2196F3', image: 'none' },
     { color: '#3E59E0', image: 'none' },
     { color: '#713ACE', image: 'none' },
