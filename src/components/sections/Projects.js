@@ -5,10 +5,10 @@ const Projects = ({ toggleProject }) => {
   const projects = [
     { label: 'Mandelbrot Final Project', icon: 'mandelbrot' },
     { label: 'Miniature Car Body Design', icon: 'carbody' },
-    { label: 'Real-Time Motor Control', icon: 'default' },
-    { label: 'Automated Pill Dispenser', icon: 'default' },
-    { label: 'Embedded Pacemaker & Monitor', icon: 'default' },
-    { label: 'Skylight Reflector Heliostat', icon: 'default' },
+    { label: 'Real-Time Motor Control', icon: 'pid' },
+    { label: 'Automated Pill Dispenser', icon: 'pillsafe' },
+    { label: 'Embedded Pacemaker & Monitor', icon: 'pacemaker' },
+    { label: 'Skylight Reflector Heliostat', icon: 'heliostat' },
   ];
   return (
     <Card

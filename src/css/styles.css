@@ -19,12 +19,20 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: Ubuntu, Helvetica, sans-serif;
 }
-.pb2 { padding-bottom: 1rem; }
-.pt2 { padding-top: 1rem; }
-.pb3 { padding-bottom: 2rem; }
-.pt3 { padding-top: 2rem; }
-.pb4 { padding-bottom: 4rem; }
-.pt4 { padding-top: 4rem; }
+
+/* css variables */
+
+:root {
+  --color-about: #2196F3;
+  --color-skills: #3E59E0;
+  --color-projects: #713ACE;
+  --color-contact: #9C27B0;
+  --shadow-level-1: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-level-2: 0 3px 6px rgba(0,0,0,0.15);
+  --shadow-level-3: 0 6px 12px rgba(0,0,0,0.15);
+  --shadow-level-4: 0 10px 20px rgba(0,0,0,0.20);
+  --shadow-level-5: 0 15px 30px rgba(0,0,0,0.25);
+}
 
 /* cards */
 
@@ -63,7 +71,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: left;
   padding: 1rem;
   background-color: rgba(0,0,0,0.075);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-level-1);
 }
 .card-title {
   color: #F9F9F9;
@@ -78,23 +86,12 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: 2rem;
   color: #222;
   background-color: #F9F9F9;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-level-2);
 }
-.shadow {
-  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-}
-.about-title {
-  background-color: #2196F3;
-}
-.skills-title {
-  background-color: #3E59E0;
-}
-.projects-title {
-  background-color: #713ACE;
-}
-.contact-title {
-  background-color: #9C27B0;
-}
+.about-title { background-color: var(--color-about); }
+.skills-title { background-color: var(--color-skills); }
+.projects-title { background-color: var(--color-projects); }
+.contact-title { background-color: var(--color-contact); }
 
 /* header */
 
@@ -143,6 +140,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* skills */
+
 .skills-col {
   flex: 1 0 auto;
 }
@@ -153,7 +151,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.25rem;
   padding: 1rem;
   background-color: rgba(0,0,0,0.075);
-  color: #3E59E0;
+  color: var(--color-skills);
 }
 
 /* projects */
@@ -168,13 +166,13 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   margin: 0.5rem;
   cursor: pointer;
-  color: #713ACE;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  color: var(--color-projects);
+  box-shadow: var(--shadow-level-2);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 .project:hover{
   background-color: rgba(255,255,255,0.225);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.20);
+  box-shadow: var(--shadow-level-4);
 }
 .project-image {
   position: absolute;
@@ -214,6 +212,18 @@ h1, h2, h3, h4, h5, h6 {
 .project-icon.icon-carbody{
   background-image: url('../assets/icons/projects/carbody.svg');
 }
+.project-icon.icon-pid{
+  background-image: url('../assets/icons/projects/pid.svg');
+}
+.project-icon.icon-pillsafe{
+  background-image: url('../assets/icons/projects/pillsafe.svg');
+}
+.project-icon.icon-pacemaker{
+  background-image: url('../assets/icons/projects/pacemaker.svg');
+}
+.project-icon.icon-heliostat{
+  background-image: url('../assets/icons/projects/heliostat.svg');
+}
 .project-modal-img {
   margin-bottom: 1rem;
 }
@@ -225,15 +235,15 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1rem;
   padding-left: 2rem;
   margin: 0.5rem;
-  color: #9C27B0;
+  color: var(--color-contact);
   background-color: rgba(0,0,0,0.075);
   cursor: pointer;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-level-2);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 .contact:hover {
   background-color: rgba(255,255,255,0.225);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.20);
+  box-shadow: var(--shadow-level-4);
 }
 .contact-icon {
   display: inline-block;
@@ -301,7 +311,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+  box-shadow: var(--shadow-level-5);
 }
 .modal-header {
   height: 4rem;
@@ -336,14 +346,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 .modal-close:hover {
   background-color: rgba(255,255,255,0.225);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.20);
+  box-shadow: var(--shadow-level-4);
 }
 .modal-content {
   overflow: auto;
   height: calc(100% - 4rem);
   background-color: #F9F9F9;
   color: #222;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
 }
 
 /* youtube */
