@@ -91,6 +91,7 @@ class App extends Component {
     this.nodes.splice(-1);
     this.cards = initializeCards(this.nodes, this.size);
     this.setTransform();
+    this.setBanner();
   };
 
   handleScroll = (event) => {
