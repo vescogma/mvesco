@@ -14,6 +14,7 @@ import Pacemaker from './projects/Pacemaker';
 import Heliostat from './projects/Heliostat';
 // ui components
 import Modal from './ui/Modal';
+import Titles from './ui/Titles';
 // others
 import {
   initializeCards,
@@ -22,6 +23,10 @@ import {
   calculateCards,
   getDelta,
 } from '../utils/cardUtils';
+import {
+  headerProps,
+  projectsProps,
+} from '../utils/constants';
 
 class App extends Component {
   interruptAnimation = false;
@@ -29,13 +34,7 @@ class App extends Component {
   modalOpen = false;
   touches = [];
   size = 0;
-  colors = [
-    { color: '#01579B', image: 'url(\'./assets/images/banner.svg\')' },
-    { color: '#2196F3', image: 'none' },
-    { color: '#3E59E0', image: 'none' },
-    { color: '#713ACE', image: 'none' },
-    { color: '#9C27B0', image: 'none' },
-  ];
+  titleIndex = 0;
 
   componentWillMount() {
     window.addEventListener('resize', this.handleResize);
@@ -49,7 +48,8 @@ class App extends Component {
   componentDidMount() {
     this.refs.wrap.style.visibility = 'visible';
     this.size = window.innerHeight;
-    this.nodes = Array.from(this.refs.wrap.children);
+    this.nodes = Array.from(this.refs.wrap.children)
+    this.nodes.splice(-1);
     this.cards = initializeCards(this.nodes, this.size);
     this.setTransform();
   }
@@ -77,6 +77,7 @@ class App extends Component {
           <Skills />
           <Projects toggleProject={ this.toggleModal } />
           <Contact />
+          <Titles />
         </div>
         <Modal { ...modalProps } />
       </div>
@@ -86,14 +87,16 @@ class App extends Component {
   handleResize = (event) => {
     this.interruptAnimation = true;
     this.size = window.innerHeight;
-    this.nodes = Array.from(this.refs.wrap.children);
+    this.nodes = Array.from(this.refs.wrap.children)
+    this.nodes.splice(-1);
     this.cards = initializeCards(this.nodes, this.size);
     this.setTransform();
   };
 
   handleScroll = (event) => {
     if (!this.firstTouch) {
-      this.nodes = Array.from(this.refs.wrap.children);
+      this.nodes = Array.from(this.refs.wrap.children)
+      this.nodes.splice(-1);
       this.cards = setHeights(this.cards, this.nodes, this.size);
       this.firstTouch = true;
     }
@@ -105,7 +108,8 @@ class App extends Component {
 
   handleTouchStart = (event) => {
     if (!this.firstTouch) {
-      this.nodes = Array.from(this.refs.wrap.children);
+      this.nodes = Array.from(this.refs.wrap.children)
+      this.nodes.splice(-1);
       this.cards = setHeights(this.cards, this.nodes, this.size);
       this.firstTouch = true;
     }
@@ -133,7 +137,8 @@ class App extends Component {
     const delta = getDelta(event, type, this.touches, this.addTouch);
     if (delta > 0 || delta < 0) {
       this.cards = calculateCards(this.cards, delta, this.size, this.nodes);
-      this.setTransform()
+      this.setTransform();
+      this.setBanner();
     }
   };
 
@@ -146,7 +151,7 @@ class App extends Component {
       velocity = 0.8 * v + 0.2 * velocity;
       return next;
     })
-    if (velocity > 50 || velocity < -50) {
+    if (velocity > 75 || velocity < -75) {
       this.scrollTo(-velocity);
     }
   };
@@ -184,33 +189,48 @@ class App extends Component {
     };
   };
 
-  setBannerColor() {
-    const index = this.cards.reduce((prev, next, index) => {
-      if (next.top === true) {
-        return index;
+  setBanner() {
+    let titleIndex = 0;
+    this.cards.map((card, index) => {
+      if (card.offset <= 0) {
+        this.nodes[index].classList.add('card-back');
+        titleIndex = index;
+      } else {
+        this.nodes[index].classList.remove('card-back');
       }
-      return prev;
-    }, 0)
-    const header = document.getElementById('header');
-    header.style.backgroundColor = this.colors[index].color;
-    header.style.backgroundImage = this.colors[index].image;
+    });
+
+    if (this.titleIndex !== titleIndex) {
+      const header = document.getElementById('header');
+      header.style.backgroundColor = headerProps[titleIndex].color;
+      header.style.backgroundImage = headerProps[titleIndex].image;
+      const invisBar = document.getElementById('titles');
+      invisBar.className = 'titles-container';
+      const invisHeader = invisBar.querySelector('.titles-header');
+      const classes = headerProps[titleIndex].class;
+      const title = headerProps[titleIndex].title;
+      invisHeader.innerText = title;
+      invisHeader.className = 'titles-header ' + classes;
+    }
+    if (titleIndex === 0) {
+      document.getElementById('titles').className = 'titles-hidden';
+    }
+    this.titleIndex = titleIndex;
   };
 
   setTransform() {
-    let prop = '';
     this.nodes.map((card, index) => {
-      prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
+      let prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
       transform(card, prop);
       return card;
     });
-    this.setBannerColor();
 
     function transform(node, transformProp) {
       node.style.WebkitTransform = transformProp;
       node.style.MozTransform = transformProp;
       node.style.msTransform = transformProp;
       node.style.transform = transformProp;
-    };
+    }
   };
 
   addTouch = (touch) => {
@@ -221,40 +241,24 @@ class App extends Component {
   };
 
   toggleModal = (index) => {
-    let title = '';
-    let component = undefined;
-    switch (index) {
-      case 1:
-        title = 'Mandelbrot Final Project';
-        component = ( <Mandelbrot /> );
-        break;
-      case 2:
-        title = 'Miniature Car Body Design';
-        component = ( <ModelCar /> );
-        break;
-      case 3:
-        title = 'Real-Time Motor Control';
-        component = ( <RTMotor /> );
-        break;
-      case 4:
-        title = 'Automated Pill Dispenser';
-        component = ( <Pillsafe /> );
-        break;
-      case 5:
-        title = 'Embedded Pacemaker & Monitor';
-        component = ( <Pacemaker /> );
-        break;
-      case 6:
-        title = 'Skylight Reflector Heliostat';
-        component = ( <Heliostat /> );
-        break;
-      default:
-        title = '';
-        component = ( <div></div> );
-        break;
-    }
     this.modalOpen = !!index;
-    this.setState({ modal: index, title: title, component: component });
+    this.setState({
+      modal: index,
+      title: projectsProps[index].label,
+      component: getComponent(index),
+    });
+
+    function getComponent(index) {
+      switch (index) {
+        case 1: return ( <Mandelbrot /> );
+        case 2: return ( <ModelCar /> );
+        case 3: return ( <RTMotor /> );
+        case 4: return ( <Pillsafe /> );
+        case 5: return ( <Pacemaker /> );
+        case 6: return ( <Heliostat /> );
+        default: return undefined;
+      }
+    }
   };
 };
 
