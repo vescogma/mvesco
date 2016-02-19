@@ -1,21 +1,14 @@
 import React from 'react';
 import Card from '../ui/Card';
+import { projectsProps } from '../../utils/constants';
 
 const Projects = ({ toggleProject }) => {
-  const projects = [
-    { label: 'Mandelbrot Final Project', icon: 'mandelbrot' },
-    { label: 'Miniature Car Body Design', icon: 'carbody' },
-    { label: 'Real-Time Motor Control', icon: 'pid' },
-    { label: 'Automated Pill Dispenser', icon: 'pillsafe' },
-    { label: 'Embedded Pacemaker & Monitor', icon: 'pacemaker' },
-    { label: 'Skylight Reflector Heliostat', icon: 'heliostat' },
-  ];
   return (
     <Card
       title="Projects"
       colorClass="projects-title">
       {
-        projects.map((p, i) => {
+        projectsProps.map((p, i) => {
           return (
             <div key={ i } className="flex-auto">
               <div
