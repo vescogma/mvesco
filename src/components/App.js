@@ -33,7 +33,8 @@ class App extends Component {
   firstTouch = false;
   modalOpen = false;
   touches = [];
-  size = 0;
+  height = 0;
+  width = 0;
   titleIndex = 0;
 
   componentWillMount() {
@@ -47,11 +48,14 @@ class App extends Component {
 
   componentDidMount() {
     this.refs.wrap.style.visibility = 'visible';
-    this.size = window.innerHeight;
+    this.height = window.innerHeight;
+    this.width = window.innerWidth;
     this.nodes = Array.from(this.refs.wrap.children)
     this.nodes.splice(-1);
-    this.cards = initializeCards(this.nodes, this.size);
-    this.setTransform();
+    if (this.width > 640) {
+      this.cards = initializeCards(this.nodes, this.height);
+      this.setTransform();
+    }
   }
 
   componentWillUnmount() {
@@ -86,24 +90,31 @@ class App extends Component {
 
   handleResize = (event) => {
     this.interruptAnimation = true;
-    this.size = window.innerHeight;
+    this.height = window.innerHeight;
+    this.width = window.innerWidth;
     this.nodes = Array.from(this.refs.wrap.children)
     this.nodes.splice(-1);
-    this.cards = initializeCards(this.nodes, this.size);
-    this.setTransform();
-    this.setBanner();
+    if (this.width > 640) {
+      this.cards = initializeCards(this.nodes, this.height);
+      this.setTransform();
+      this.setBanner();
+    }
   };
 
   handleScroll = (event) => {
-    if (!this.firstTouch) {
-      this.nodes = Array.from(this.refs.wrap.children)
-      this.nodes.splice(-1);
-      this.cards = setHeights(this.cards, this.nodes, this.size);
-      this.firstTouch = true;
-    }
-    if (!this.modalOpen) {
-      this.interruptAnimation = true;
-      this.handleMove(event, 'wheel');
+    if (this.width > 640) {
+      if (!this.firstTouch) {
+        this.nodes = Array.from(this.refs.wrap.children)
+        this.nodes.splice(-1);
+        this.cards = setHeights(this.cards, this.nodes, this.height);
+        this.firstTouch = true;
+      }
+      if (!this.modalOpen) {
+        this.interruptAnimation = true;
+        this.handleMove(event, 'wheel');
+      }
+    } else {
+      this.mobileScroll();
     }
   };
 
@@ -111,7 +122,7 @@ class App extends Component {
     if (!this.firstTouch) {
       this.nodes = Array.from(this.refs.wrap.children)
       this.nodes.splice(-1);
-      this.cards = setHeights(this.cards, this.nodes, this.size);
+      this.cards = setHeights(this.cards, this.nodes, this.height);
       this.firstTouch = true;
     }
     if (!this.modalOpen) {
@@ -137,7 +148,7 @@ class App extends Component {
   handleMove = (event, type) => {
     const delta = getDelta(event, type, this.touches, this.addTouch);
     if (delta > 0 || delta < 0) {
-      this.cards = calculateCards(this.cards, delta, this.size, this.nodes);
+      this.cards = calculateCards(this.cards, delta, this.height, this.nodes);
       this.setTransform();
       this.setBanner();
     }
@@ -190,6 +201,29 @@ class App extends Component {
     };
   };
 
+  mobileScroll() {
+    let index = 0;
+    let distance = 0
+    this.nodes.map((card, i) => {
+      const top = card.getBoundingClientRect().top;
+      if (top <= 0) {
+        index = i;
+      }
+      if (top > 0 && top < 60 && index < i) {
+        distance = top;
+      }
+    });
+    document.getElementById('titles').style.top = distance > 0 ?
+      distance - 60 + 'px' : '0px';
+    if (this.titleIndex !== index) {
+      this.setFixedBanner(index);
+    }
+    if (index === 0) {
+      document.getElementById('titles').className = 'titles-hidden';
+    }
+    this.titleIndex = index;
+  }
+
   setBanner() {
     let titleIndex = 0;
     this.cards.map((card, index) => {
@@ -200,24 +234,26 @@ class App extends Component {
         this.nodes[index].classList.remove('card-back');
       }
     });
-
     if (this.titleIndex !== titleIndex) {
       const header = document.getElementById('header');
       header.style.backgroundColor = headerProps[titleIndex].color;
       header.style.backgroundImage = headerProps[titleIndex].image;
-      const invisBar = document.getElementById('titles');
-      invisBar.className = 'titles-container';
-      const invisHeader = invisBar.querySelector('.titles-header');
-      const classes = headerProps[titleIndex].class;
-      const title = headerProps[titleIndex].title;
-      invisHeader.innerText = title;
-      invisHeader.className = 'titles-header ' + classes;
+      this.setFixedBanner(titleIndex)
     }
     if (titleIndex === 0) {
       document.getElementById('titles').className = 'titles-hidden';
     }
     this.titleIndex = titleIndex;
   };
+
+  setFixedBanner(titleIndex) {
+    const invisBar = document.getElementById('titles');
+    const invisHeader = invisBar.querySelector('.titles-header');
+    const classes = headerProps[titleIndex].class;
+    invisBar.className = 'titles-container';
+    invisHeader.innerText = headerProps[titleIndex].title;
+    invisHeader.className = 'titles-header ' + classes;
+  }
 
   setTransform() {
     this.nodes.map((card, index) => {
