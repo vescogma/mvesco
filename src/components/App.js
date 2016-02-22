@@ -39,6 +39,7 @@ class App extends Component {
 
   componentWillMount() {
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('wheel', this.handleScroll);
     window.addEventListener('touchstart', this.handleTouchStart);
     window.addEventListener('touchend', this.handleTouchEnd);
@@ -60,6 +61,7 @@ class App extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('scroll', this.handleScroll);
     window.removeEventListener('wheel', this.handleScroll);
     window.removeEventListener('touchstart', this.handleTouchStart);
     window.removeEventListener('touchend', this.handleTouchEnd);
@@ -98,6 +100,10 @@ class App extends Component {
       this.cards = initializeCards(this.nodes, this.height);
       this.setTransform();
       this.setBanner();
+    } else {
+      this.nodes.map(card => {
+        card.style.transform = 'none';
+      })
     }
   };
 
@@ -119,13 +125,13 @@ class App extends Component {
   };
 
   handleTouchStart = (event) => {
-    if (!this.firstTouch) {
+    if (this.width > 640 && !this.firstTouch) {
       this.nodes = Array.from(this.refs.wrap.children)
       this.nodes.splice(-1);
       this.cards = setHeights(this.cards, this.nodes, this.height);
       this.firstTouch = true;
     }
-    if (!this.modalOpen) {
+    if (this.width > 640 && !this.modalOpen) {
       this.interruptAnimation = true;
       const touch = event.touches[0];
       this.addTouch({ y: touch.clientY, stamp: Date.now() });
@@ -133,13 +139,13 @@ class App extends Component {
   };
 
   handleTouch = (event) => {
-    if (!this.modalOpen) {
+    if (this.width > 640 && !this.modalOpen) {
       this.handleMove(event.touches[0], 'touch');
     }
   };
 
   handleTouchEnd = (event) => {
-    if (!this.modalOpen) {
+    if (this.width > 640 && !this.modalOpen) {
       this.handleRelease(this.touches);
       this.touches = [];
     }
@@ -203,18 +209,18 @@ class App extends Component {
 
   mobileScroll() {
     let index = 0;
-    let distance = 0
+    let d = 0
     this.nodes.map((card, i) => {
       const top = card.getBoundingClientRect().top;
       if (top <= 0) {
         index = i;
       }
       if (top > 0 && top < 60 && index < i) {
-        distance = top;
+        d = top;
       }
     });
-    document.getElementById('titles').style.top = distance > 0 ?
-      distance - 60 + 'px' : '0px';
+    let prop = 'translate3d(0px, ' + (d > 0 ? d - 60 : 0) + 'px, 0px)';
+    this.transform(document.getElementById('titles'), prop);
     if (this.titleIndex !== index) {
       this.setFixedBanner(index);
     }
@@ -236,8 +242,7 @@ class App extends Component {
     });
     if (this.titleIndex !== titleIndex) {
       const header = document.getElementById('header');
-      header.style.backgroundColor = headerProps[titleIndex].color;
-      header.style.backgroundImage = headerProps[titleIndex].image;
+      header.className = 'header ' + headerProps[titleIndex].header;
       this.setFixedBanner(titleIndex)
     }
     if (titleIndex === 0) {
@@ -258,17 +263,17 @@ class App extends Component {
   setTransform() {
     this.nodes.map((card, index) => {
       let prop = 'translate3d(0px, ' + this.cards[index].offset + 'px, 0px)';
-      transform(card, prop);
+      this.transform(card, prop);
       return card;
     });
-
-    function transform(node, transformProp) {
-      node.style.WebkitTransform = transformProp;
-      node.style.MozTransform = transformProp;
-      node.style.msTransform = transformProp;
-      node.style.transform = transformProp;
-    }
   };
+
+  transform(node, transformProp) {
+    node.style.WebkitTransform = transformProp;
+    node.style.MozTransform = transformProp;
+    node.style.msTransform = transformProp;
+    node.style.transform = transformProp;
+  }
 
   addTouch = (touch) => {
     this.touches.push(touch);
