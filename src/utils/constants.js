@@ -2,32 +2,27 @@ export const headerProps = [
   {
     title: '',
     class: '',
-    color: '#01579B',
-    image: 'url(\'./assets/images/bridge.jpg\')'
+    header: 'banner-header'
   },
   {
     title: 'About',
     class: 'about-title',
-    color: '#2196F3',
-    image: 'none'
+    header: 'about-header'
   },
   {
     title: 'Skills',
     class: 'skills-title',
-    color: '#3E59E0',
-    image: 'none'
+    header: 'skills-header'
   },
   {
     title: 'Projects',
     class: 'projects-title',
-    color: '#713ACE',
-    image: 'none'
+    header: 'projects-header'
   },
   {
     title: 'Contact',
     class: 'contact-title',
-    color: '#9C27B0',
-    image: 'none'
+    header: 'contact-header'
   },
 ];
 

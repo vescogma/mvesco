@@ -242,8 +242,7 @@ class App extends Component {
     });
     if (this.titleIndex !== titleIndex) {
       const header = document.getElementById('header');
-      header.style.backgroundColor = headerProps[titleIndex].color;
-      header.style.backgroundImage = headerProps[titleIndex].image;
+      header.className = 'header ' + headerProps[titleIndex].header;
       this.setFixedBanner(titleIndex)
     }
     if (titleIndex === 0) {
