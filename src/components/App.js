@@ -286,7 +286,7 @@ class App extends Component {
     this.modalOpen = !!index;
     this.setState({
       modal: index,
-      title: projectsProps[index].label,
+      title: index === 0 ? '' : projectsProps[index - 1].label,
       component: getComponent(index),
     });
 
